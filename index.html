@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>actually good roblox games to play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#0a0912;
+    --bg-void-2:#0d0b17;
+    --panel:#14111f;
+    --panel-hi:#1b1729;
+    --signal:#f4e04d;
+    --signal-soft:#fff3a3;
+    --signal-dim:#8f8534;
+    --static-purple:#8b7ad1;
+    --danger:#ff6b8a;
+    --fog:#d6d2e3;
+    --fog-dim:#84809a;
+    --line:#242038;
+    --line-soft:#1a1728;
+    --page-zoom:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-void);
+    color:var(--fog);
+    font-family:'Inter',sans-serif;
+    font-weight:400;
+    line-height:1.65;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--signal);color:var(--bg-void);}
+
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- BACKDROP ---------- */
+  .noise-layer{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    opacity:.035; mix-blend-mode:screen;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .mesh{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(600px 420px at 15% -5%, rgba(244,224,77,.10), transparent 60%),
+      radial-gradient(700px 500px at 100% 10%, rgba(139,122,209,.16), transparent 60%),
+      radial-gradient(500px 400px at 50% 40%, rgba(255,107,138,.05), transparent 65%),
+      linear-gradient(180deg, var(--bg-void-2), var(--bg-void) 40%);
+  }
+  .grain-vignette{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    box-shadow:inset 0 0 180px rgba(0,0,0,.55);
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,9,18,.72);
+    backdrop-filter:blur(16px) saturate(140%);
+    border-bottom:1px solid var(--line-soft);
+    padding:10px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    flex-wrap:wrap;
+  }
+  .logo{
+    font-family:'Archivo Black',sans-serif;
+    font-size:13px;
+    letter-spacing:.3px;
+    color:#fff;
+    display:flex; align-items:center; gap:10px;
+    text-transform:lowercase;
+    line-height:1.2;
+    flex-shrink:0;
+  }
+  .logo .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--signal);
+    box-shadow:0 0 14px 2px rgba(244,224,77,.7);
+    animation:pulse 1.8s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.65);}}
+
+  .filters{
+    display:flex; gap:7px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:var(--line) transparent;
+    max-width:100%;
+    min-width:0;
+    flex:1 1 0;
+    width:0;
+    padding:2px 2px 5px;
+    touch-action:pan-x;
+    overscroll-behavior-x:contain;
+  }
+  .filters::-webkit-scrollbar{height:5px;}
+  .filters::-webkit-scrollbar-track{background:transparent;}
+  .filters::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    padding:8px 13px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    background:rgba(255,255,255,.02);
+    color:var(--fog-dim);
+    cursor:pointer;
+    transition:.2s cubic-bezier(.2,.8,.2,1);
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .chip:hover{border-color:var(--signal-dim); color:var(--fog); background:rgba(244,224,77,.05);}
+  .chip.active{
+    background:var(--signal); color:#1a1706; border-color:var(--signal);
+    font-weight:600;
+    box-shadow:0 0 0 3px rgba(244,224,77,.15), 0 4px 14px -4px rgba(244,224,77,.5);
+  }
+
+  .header-right{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; min-width:0; flex:1 1 auto;}
+  .full-screen-btn{
+    width:32px; height:32px; border-radius:10px; border:1px solid var(--line);
+    background:rgba(255,255,255,.02); color:var(--fog); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; line-height:1; transition:border-color .2s ease, color .2s ease, transform .2s ease;
+    flex-shrink:0;
+  }
+  .full-screen-btn:hover{
+    border-color:var(--signal-dim); color:var(--signal); transform:translateY(-1px);
+  }
+  .lang-select-wrap{position:relative; display:inline-flex; flex-shrink:0;}
+  .lang-select{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    padding:7px 10px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    background:rgba(255,255,255,.02);
+    color:var(--fog);
+    cursor:pointer;
+    min-width:110px;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    text-align:left;
+  }
+  .lang-select:hover{border-color:var(--signal-dim);}
+  .lang-select:focus{outline:none; border-color:var(--signal);}
+  .lang-current{display:flex; align-items:center; gap:8px; white-space:nowrap;}
+  .lang-flag,.flag{
+    width:19px; height:13px; display:inline-block; flex:0 0 19px; border-radius:2px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.18); position:relative; overflow:hidden;
+  }
+  .flag-us{background:repeating-linear-gradient(to bottom,#b22234 0 1px,#fff 1px 2px);}
+  .flag-us::before{content:"";position:absolute;inset:0 auto auto 0;width:8px;height:7px;background:#3c3b6e;}
+  .flag-il{background:linear-gradient(to bottom,#fff 0 27%,#1672b8 27% 39%,#fff 39% 61%,#1672b8 61% 73%,#fff 73%);}
+  .flag-es{background:linear-gradient(to bottom,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%);}
+  .flag-fr{background:linear-gradient(to right,#0055a4 0 33%,#fff 33% 66%,#ef4135 66%);}
+  .flag-pt{background:linear-gradient(to right,#046a38 0 40%,#da291c 40%);}
+  .flag-pt::before{content:"";position:absolute;left:6px;top:3px;width:5px;height:7px;border-radius:50%;background:#ffcd00;}
+  .flag-de{background:linear-gradient(to bottom,#000 0 33%,#dd0000 33% 66%,#ffce00 66%);}
+  .flag-sa{background:#006c35;}
+  .flag-sa::before{content:"";position:absolute;left:3px;top:5px;width:13px;height:2px;background:#fff;border-radius:2px;}
+  .flag-jp{background:#fff;}
+  .flag-jp::before{content:"";position:absolute;left:6px;top:3px;width:7px;height:7px;border-radius:50%;background:#bc002d;}
+  .flag-cn{background:#de2910;}
+  .flag-cn::before{content:"★";position:absolute;left:3px;top:-4px;color:#ffde00;font-size:11px;}
+  .flag-ko{background:#fff;}
+  .flag-ko::before{content:"☯";position:absolute;left:5px;top:0;color:#c60c30;font-size:11px;line-height:13px;}
+  .lang-caret{font-size:10px; color:var(--fog-dim); margin-left:auto;}
+  .lang-menu{
+    position:absolute; top:calc(100% + 8px); right:0; min-width:165px; z-index:80;
+    background:rgba(15,13,22,.98); border:1px solid var(--line); border-radius:14px;
+    box-shadow:0 18px 40px -24px rgba(0,0,0,.9); padding:8px; display:none;
+  }
+  .lang-select-wrap.open .lang-menu{display:block;}
+  .lang-option{
+    width:100%; display:flex; align-items:center; gap:10px; background:transparent; border:none;
+    color:var(--fog); font-family:'IBM Plex Mono',monospace; font-size:12px; padding:8px 10px;
+    border-radius:10px; cursor:pointer; text-align:left;
+  }
+  .lang-option:hover{background:rgba(255,255,255,.05);}
+  .lang-option.active{background:rgba(244,224,77,.08); color:#fff;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; z-index:1;
+    padding:88px 24px 64px;
+    max-width:1100px; margin:0 auto;
+    text-align:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:1.5px;
+    color:var(--static-purple);
+    text-transform:uppercase;
+    margin-bottom:22px;
+    padding:6px 14px 6px 10px;
+    border:1px solid rgba(139,122,209,.35);
+    border-radius:100px;
+    background:rgba(139,122,209,.08);
+    box-shadow:0 10px 24px -18px rgba(139,122,209,.8);
+  }
+  .eyebrow .pip{width:6px;height:6px;border-radius:50%;background:var(--static-purple);box-shadow:0 0 8px var(--static-purple);}
+  h1{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(36px,7vw,72px);
+    line-height:1.05;
+    letter-spacing:-.5px;
+    color:#fff;
+    margin-bottom:22px;
+  }
+  h1 .accent{
+    background:linear-gradient(100deg, var(--signal-soft), var(--signal) 55%, #d9a441);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .sub{
+    font-size:18px;
+    color:var(--fog-dim);
+    max-width:560px;
+    margin:0 auto 34px;
+  }
+  .stats{
+    display:flex; justify-content:center; gap:0; flex-wrap:wrap;
+    border:1px solid var(--line-soft);
+    background:rgba(255,255,255,.015);
+    border-radius:16px;
+    max-width:520px; margin:0 auto;
+    overflow:hidden;
+  }
+  .stat{
+    flex:1; min-width:130px;
+    padding:18px 12px;
+    text-align:center;
+    border-inline-start:1px solid var(--line-soft);
+  }
+  .stat:first-child{border-inline-start:none;}
+  .stat b{
+    display:block; font-family:'Archivo Black',sans-serif;
+    font-size:24px; color:var(--signal); margin-bottom:2px;
+  }
+  .stat span{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--fog-dim); text-transform:uppercase; letter-spacing:.5px;}
+
+  /* ---------- SECTION ---------- */
+  .wrap{max-width:1100px; margin:0 auto; padding:0 24px;}
+  .section{
+    position:relative; z-index:1;
+    padding:56px 0 8px;
+  }
+  .section-head{
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:26px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .section-bar{width:4px; height:26px; border-radius:3px; flex-shrink:0;}
+  .section-head h2{
+    font-family:'Archivo Black',sans-serif;
+    font-size:21px;
+    color:#fff;
+    letter-spacing:-.2px;
+  }
+  .section-count{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--fog-dim);
+    margin-inline-start:auto;
+    padding:4px 10px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    flex-shrink:0;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(255px,1fr));
+    gap:14px;
+  }
+
+  .card{
+    --accent:var(--signal);
+    background:linear-gradient(160deg, var(--panel-hi), var(--panel));
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:0;
+    display:flex; flex-direction:column;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, box-shadow .25s;
+    position:relative;
+    overflow:hidden;
+    text-decoration:none;
+    color:inherit;
+    opacity:0; transform:translateY(14px);
+  }
+  .card-body{padding:19px; display:flex; flex-direction:column; gap:12px; flex:1; position:relative;}
+  .card-thumb{
+    width:100%; aspect-ratio:500/280; overflow:hidden; position:relative;
+    background:linear-gradient(135deg, var(--accent)33, var(--panel));
+    flex-shrink:0;
+  }
+  .card-thumb img{
+    width:100%; height:100%; object-fit:contain; display:block; padding:8px;
+    transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .card:hover .card-thumb img{transform:scale(1.06);}
+  .card-thumb.no-img{
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Archivo Black',sans-serif; font-size:13px; letter-spacing:.5px;
+    color:var(--accent); opacity:.55; text-transform:uppercase;
+  }
+  .card.in{opacity:1; transform:translateY(0);}
+  .card::before{
+    content:""; position:absolute; inset:0; border-radius:16px; padding:1px;
+    background:linear-gradient(135deg, var(--accent), transparent 40%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xorm;
+    mask-composite: exclude;
+    opacity:0; transition:opacity .25s;
+    pointer-events:none; z-index:2;
+  }
+  .card::after{
+    content:""; position:absolute; top:-40%; inset-inline-start:-20%; width:70%; height:180%;
+    background:radial-gradient(circle, var(--accent), transparent 70%);
+    opacity:0; filter:blur(30px); transition:opacity .3s; pointer-events:none; z-index:2;
+  }
+  .card:hover{
+    border-color:transparent;
+    transform:translateY(-4px);
+    box-shadow:0 20px 40px -20px rgba(0,0,0,.6);
+  }
+  .card:hover::before{opacity:.55;}
+  .card:hover::after{opacity:.10;}
+  .card:hover .play-hint{opacity:1; transform:translateX(0);}
+  .play-hint{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--accent);
+    opacity:0; transform:translateX(-6px);
+    transition:.2s;
+    display:flex; align-items:center; gap:4px;
+    position:relative; z-index:1;
+  }
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; position:relative; z-index:1;}
+  .card h3{
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:16.5px;
+    color:#fff;
+    letter-spacing:-.1px;
+  }
+  .card p{font-size:13.5px; color:var(--fog-dim); flex:1; position:relative; z-index:1;}
+
+  .signal-meter{display:flex; gap:3px; align-items:flex-end; height:15px; flex-shrink:0;}
+  .signal-meter span{
+    width:4px; display:block; background:var(--line); border-radius:1px;
+  }
+  .signal-meter span:nth-child(1){height:30%;}
+  .signal-meter span:nth-child(2){height:50%;}
+  .signal-meter span:nth-child(3){height:70%;}
+  .signal-meter span:nth-child(4){height:85%;}
+  .signal-meter span:nth-child(5){height:100%;}
+  .signal-meter.lvl-3 span:nth-child(-n+3){background:var(--accent); opacity:.65;}
+  .signal-meter.lvl-4 span:nth-child(-n+4){background:var(--accent); opacity:.85;}
+  .signal-meter.lvl-5 span{background:var(--accent);}
+  .signal-meter.lvl-5{filter:drop-shadow(0 0 5px var(--accent));}
+
+  .card-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:10px; border-top:1px solid var(--line-soft);
+    position:relative; z-index:1;
+  }
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--accent);
+    opacity:.85;
+  }
+  .best-with{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--fog-dim);
+  }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(5,4,10,.85);
+    backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+    opacity:0; pointer-events:none;
+    transition:opacity .25s;
+  }
+  .modal-overlay.open{opacity:1; pointer-events:auto;}
+  .modal-panel{
+    --accent:var(--signal);
+    width:100%; max-width:640px; max-height:90vh;
+    overflow-y:auto;
+    background:linear-gradient(160deg, var(--panel-hi), var(--panel));
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02);
+    transform:scale(.94) translateY(10px);
+    transition:transform .25s cubic-bezier(.2,.8,.2,1);
+    position:relative;
+  }
+  .modal-overlay.open .modal-panel{transform:scale(1) translateY(0);}
+  .modal-close{
+    position:absolute; top:14px; inset-inline-end:14px; z-index:3;
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(10,9,18,.6); backdrop-filter:blur(6px);
+    border:1px solid var(--line);
+    color:#fff; font-size:18px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .modal-close:hover{border-color:var(--accent); color:var(--accent);}
+  .modal-thumb{
+    width:100%; aspect-ratio:500/280;
+    background:linear-gradient(135deg, var(--accent)33, var(--panel));
+    overflow:hidden;
+  }
+  .modal-thumb img{width:100%; height:100%; object-fit:contain; display:block; padding:10px;}
+  .modal-thumb.no-img{
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Archivo Black',sans-serif; font-size:22px; letter-spacing:.5px;
+    color:var(--accent); opacity:.6; text-transform:uppercase; text-align:center; padding:20px;
+  }
+  .modal-body{padding:26px;}
+  .modal-top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:14px;}
+  .modal-body h2{
+    font-family:'Archivo Black',sans-serif; font-size:26px; color:#fff; letter-spacing:-.3px;
+  }
+  .modal-body p{font-size:15.5px; color:var(--fog-dim); line-height:1.7; margin-bottom:20px;}
+  .modal-meta{
+    display:flex; gap:10px; flex-wrap:wrap;
+    padding-top:16px; border-top:1px solid var(--line-soft);
+  }
+  .modal-meta span{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px;
+    padding:6px 12px; border-radius:100px;
+    border:1px solid var(--line);
+    color:var(--fog-dim);
+  }
+  .modal-meta .m-cat{color:var(--accent); border-color:var(--accent)55;}
+  .modal-hint{
+    margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:12px;
+    color:var(--fog-dim); opacity:.7;
+  }
+  .modal-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:12px; padding:10px 16px; border-radius:999px;
+    border:1px solid var(--accent); background:rgba(255,255,255,.04);
+    color:#fff; text-decoration:none; font-weight:700; letter-spacing:.2px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.02), 0 10px 26px -16px var(--accent);
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .modal-cta:hover{
+    transform:translateY(-1px); border-color:var(--accent); box-shadow:0 0 0 1px rgba(255,255,255,.04), 0 16px 32px -18px var(--accent);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:70px;
+    border-top:1px solid var(--line-soft);
+    padding:44px 24px 60px;
+    text-align:center;
+    position:relative; z-index:1;
+  }
+  footer .credit{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--fog-dim);
+    max-width:480px;
+    margin:0 auto 10px;
+  }
+  footer .made{font-size:11.5px; color:#454057; margin-top:18px; letter-spacing:.3px;}
+
+  @media(min-width:1400px){
+    .wrap, .hero{max-width:1280px;}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));}
+  }
+
+  @media(max-width:900px){
+    .wrap, .hero{max-width:100%;}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+  }
+
+  @media(max-width:1120px){
+    header{flex-wrap:wrap;}
+    .header-right{width:100%; justify-content:space-between;}
+    .filters{flex:1 1 100%;}
+  }
+
+  @media(max-width:640px){
+    header{padding:12px 16px; gap:10px; flex-wrap:wrap;}
+    .header-right{width:100%; justify-content:space-between;}
+    .filters{flex:1 1 100%; width:100%; order:3;}
+    .hero{padding:56px 18px 42px;}
+    h1{font-size:clamp(30px,9vw,44px);}
+    .sub{font-size:15.5px; padding:0 4px;}
+    .section{padding:40px 0 4px;}
+    .section-head h2{font-size:18px;}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px;}
+    .card{padding:15px; border-radius:13px;}
+    .card h3{font-size:15px;}
+    .card p{font-size:12.5px;}
+    .stats{max-width:100%;}
+    .stat{min-width:33%; padding:14px 6px;}
+    .stat b{font-size:19px;}
+    .stat span{font-size:9px;}
+    .wrap{padding:0 16px;}
+  }
+
+  @media(max-width:380px){
+    .grid{grid-template-columns:1fr 1fr; gap:8px;}
+    h1{font-size:28px;}
+  }
+
+  .hidden{display:none !important;}
+  html.app-fullscreen, html.app-fullscreen body{
+    width:100%; min-height:100%; overflow-x:hidden; overflow-y:auto;
+  }
+  html.app-fullscreen body{height:auto; min-height:100dvh;}
+</style>
+</head>
+<body>
+
+<div class="mesh"></div>
+<div class="noise-layer"></div>
+<div class="grain-vignette"></div>
+
+<header>
+  <div class="logo"><span class="dot"></span><span data-i18n-html="logo">actually good<br>roblox games to play</span></div>
+  <div class="header-right">
+    <nav class="filters" id="filters"></nav>
+    <button class="full-screen-btn" id="fullScreenBtn" type="button" aria-label="Toggle full screen">⤢</button>
+    <div class="lang-select-wrap" id="langSelectWrap">
+      <button class="lang-select mono" id="langSelect" type="button" aria-label="Language" aria-expanded="false">
+        <span class="lang-current"><span class="lang-flag flag-us"></span><span>English</span></span>
+        <span class="lang-caret">▾</span>
+      </button>
+      <div class="lang-menu" id="langMenu" role="menu" aria-label="Language menu">
+        <button class="lang-option active" type="button" data-lang="en" role="menuitem"><span class="flag flag-us"></span><span>English</span></button>
+        <button class="lang-option" type="button" data-lang="he" role="menuitem"><span class="flag flag-il"></span><span>עברית</span></button>
+        <button class="lang-option" type="button" data-lang="es" role="menuitem"><span class="flag flag-es"></span><span>Español</span></button>
+        <button class="lang-option" type="button" data-lang="fr" role="menuitem"><span class="flag flag-fr"></span><span>Français</span></button>
+        <button class="lang-option" type="button" data-lang="pt" role="menuitem"><span class="flag flag-pt"></span><span>Português</span></button>
+        <button class="lang-option" type="button" data-lang="de" role="menuitem"><span class="flag flag-de"></span><span>Deutsch</span></button>
+        <button class="lang-option" type="button" data-lang="ar" role="menuitem"><span class="flag flag-sa"></span><span>العربية</span></button>
+        <button class="lang-option" type="button" data-lang="ja" role="menuitem"><span class="flag flag-jp"></span><span>日本語</span></button>
+        <button class="lang-option" type="button" data-lang="zh" role="menuitem"><span class="flag flag-cn"></span><span>简体中文</span></button>
+        <button class="lang-option" type="button" data-lang="ko" role="menuitem"><span class="flag flag-ko"></span><span>한국어</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow"><span class="pip"></span><span data-i18n="eyebrow">human curated // not the algorithm</span></div>
+  <h1 data-i18n-html="hero"></h1>
+  <p class="sub" data-i18n="sub">Every game here was picked by hand, not because it's trending, but because it's actually worth your time. No generic simulators, no clones, no brainrot.</p>
+  <div class="stats" id="stats"></div>
+</section>
+
+<div class="wrap">
+</div>
+
+<div class="wrap" id="sections"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-panel" id="modalPanel">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <div id="modalThumbWrap"></div>
+    <div class="modal-body">
+      <div class="modal-top">
+        <h2 id="modalTitle"></h2>
+        <div class="signal-meter" id="modalMeter"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <p id="modalDesc"></p>
+      <div class="modal-meta">
+        <span class="m-cat" id="modalCat"></span>
+        <span id="modalWith"></span>
+      </div>
+      <p class="modal-hint" id="modalHint"></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p class="credit" data-i18n="footerCredit">A hand-picked list, updated over time — every game here earns its spot on quality, not hashtags.</p>
+  <p class="made mono" data-i18n="footerMade">BUILT BY ONE DEVELOPER, AGAINST THE NOISE.</p>
+</footer>
+
+<script>
+const DATA = [
+  {
+    cat: "pvp", catLabel: "PvP / Combat",
+    games: [
+      {name:"Blade Ball", desc:"Fast sword combat built around reflex-based dodging. Easy to learn, hard to master — every round is over in seconds.", lvl:5, with:"1+ players"},
+      {name:"Slap Battles", desc:"A boss-and-glove series with ridiculous effects. More comedy than serious combat, and that's exactly its charm.", lvl:4, with:"solo / group"},
+      {name:"Rivals", desc:"A tactical 5v5 shooter with great hit feedback and tight maps. The closest thing Roblox has to CS.", lvl:5, with:"squads"},
+      {name:"Combat Warriors", desc:"Melee and guns in the same combat system, with a slow but satisfying progression loop.", lvl:4, with:"solo"},
+      {name:"The Strongest Battlegrounds", desc:"Anime-inspired 1v1 fights with unique abilities per character. Competitive and quick to pick up.", lvl:4, with:"1v1"},
+      {name:"Arsenal", desc:"A fast gun-game classic — cycle through a huge weapon roster every kill. Simple, chaotic, endlessly replayable.", lvl:4, with:"squads"},
+      {name:"Phantom Forces", desc:"A more serious tactical shooter with real weapon customization and recoil patterns. For people who want Roblox FPS to feel like a real FPS.", lvl:5, with:"squads"},
+      {name:"Bad Business", desc:"A team-based shooter with classes and objectives, closer to Team Fortress than a twitch shooter.", lvl:4, with:"squads"},
+      {name:"Notoriety", desc:"A heist-and-shootout game with cops-vs-robbers energy and genuinely tense gunfights.", lvl:3, with:"squads"},
+      {name:"Strucid", desc:"A Fortnite-style battle royale with building mechanics. Rougher around the edges, but scratches the same itch.", lvl:3, with:"solo / squads"},
+      {name:"Da Hood", desc:"An open-world brawler/shooter hybrid with a big competitive following. Rough tone, but the combat loop is genuinely skill-based.", lvl:3, with:"squads"},
+      {name:"Grand Piece Online", desc:"A pirate-adventure game with real naval combat and a huge world to sail and fight across.", lvl:4, with:"solo / crew"},
+      {name:"Untitled Tag Game", desc:"A fast dodgeball-style tag game with a devoted following — simple rules, surprisingly high skill ceiling.", lvl:3, with:"group"},
+      {name:"Bedwars", desc:"A build-and-battle mode where you defend your bed while raiding everyone else's. Strategy and combat in equal parts.", lvl:4, with:"squads"},
+      {name:"Bumper Cars", desc:"Last-car-standing arena knockouts — predict your opponents' moves and bump them off before they bump you.", lvl:3, with:"group"},
+      {name:"Project Power", desc:"A free-for-all superhero brawler with flight, super strength, and full destructible environments. Everyone gets the same powers — only skill separates you.", lvl:4, with:"open server"},
+      {name:"Dueling Grounds", desc:"Pure skill-based 1v1 weapon dueling with no gacha powers to abuse — casual and ranked modes, just you versus your opponent.", lvl:4, with:"1v1"},
+      {name:"BloxStrike", desc:"A competitive 5v5 round-based tactical shooter with a buy economy and a deep skin system — Roblox's answer to Counter-Strike.", lvl:4, with:"squads"},
+      {name:"The Eastern War", desc:"A persistent, realistic military shooter with vehicle combat and open-world battlefields across shifting factions.", lvl:4, with:"large squads"},
+    ]
+  },
+  {
+    cat: "horror", catLabel: "Horror",
+    games: [
+      {name:"Doors", desc:"Atmospheric hallway horror — every door is a gamble. Sound design does half the work. Best played with friends on voice.", lvl:5, with:"1-4 players"},
+      {name:"Pressure", desc:"From the makers of Doors — underwater survival with monsters and limited resources. Constant tension, not just jump scares.", lvl:5, with:"solo / group"},
+      {name:"Forsaken", desc:"Multiplayer survival against an unseen entity. Comes back every year because the formula just works.", lvl:4, with:"large group"},
+      {name:"3008", desc:"An endless, dangerous supermarket. No explanations, just exploring and getting spooked.", lvl:4, with:"solo"},
+      {name:"Apeirophobia", desc:"A liminal-space horror crawl through shifting, unsettling levels. Built on dread and atmosphere over jump scares.", lvl:4, with:"1-4 players"},
+      {name:"The Mimic", desc:"A chapter-based horror story inspired by Japanese folklore, with genuinely creepy set pieces and puzzle-solving.", lvl:5, with:"1-4 players"},
+      {name:"Piggy", desc:"A chase-and-escape horror game with a surprisingly deep ongoing story across dozens of chapters.", lvl:3, with:"1-6 players"},
+      {name:"Bear", desc:"A hide-and-seek survival game where one player hunts the rest. Simple rules, real tension.", lvl:3, with:"group"},
+      {name:"Camping", desc:"A slow-burn survival horror classic — gather supplies at a campsite while something stalks you at night.", lvl:3, with:"group"},
+      {name:"Guest 666", desc:"A cursed-elevator horror game riffing on the old 'Guest 666' internet legend. Short, sharp scares.", lvl:3, with:"solo / group"},
+      {name:"Escape the Backrooms", desc:"A co-op crawl through the liminal 'Backrooms' internet phenomenon, with real puzzle and survival elements.", lvl:4, with:"1-4 players"},
+      {name:"Nico's Nextbots", desc:"You're chased through open maps by fast, unpredictable 'nextbots'. Pure adrenaline, no story needed.", lvl:3, with:"solo / group"},
+      {name:"Westwood", desc:"An abandoned town, an unknown creature stalking the streets, and you need to gather resources and survive until sunrise.", lvl:5, with:"better with a friend"},
+      {name:"Slaughter", desc:"A tense survival-horror game with a strong reputation for genuinely unsettling atmosphere.", lvl:4, with:"group"},
+      {name:"Mocker [Horror]", desc:"A horror experience built around unsettling encounters and tense exploration.", lvl:4, with:"solo / group"},
+      {name:"Funhouse", desc:"A carnival-horror game with a twisted, unsettling take on the classic funhouse setting.", lvl:4, with:"group"},
+      {name:"The Butchery", desc:"A grotesque, atmosphere-heavy horror game built around dread more than jump scares.", lvl:3, with:"solo / group"},
+      {name:"The Hour of Creation", desc:"A nostalgia-tinged horror/adventure experience with a strong cult following.", lvl:3, with:"solo / group"},
+      {name:"Wonderland", desc:"An anime-styled horror/adventure experience with a distinct visual identity.", lvl:3, with:"solo / group"},
+      {name:"The Rake", desc:"A classic Roblox horror creature-hunt — a fast, silent monster stalking the map at night.", lvl:3, with:"group"},
+      {name:"Face Your Fears - A Phobia Game", desc:"A survival-horror experience built around escaping frightening scenarios and facing different phobias.", lvl:3, with:"solo / group"},
+    ]
+  },
+  {
+    cat: "rpg", catLabel: "Adventure / RPG",
+    games: [
+      {name:"King Legacy", desc:"An open world inspired by pirates, with unique 'fruit' powers and impressive bosses. A long progression that feels worth it.", lvl:4, with:"solo / friends"},
+      {name:"Deepwoken", desc:"A genuine Souls-like on Roblox — hard, unforgiving, and satisfying when you pull through. Not for a relaxed session.", lvl:5, with:"hardcore solo"},
+      {name:"Fisch", desc:"Fishing with more depth than you'd expect — economy, gear, hidden maps. Relaxing and addictive at once.", lvl:4, with:"chill solo"},
+      {name:"Blox Fruits", desc:"The genre's giant — a massive open world with hundreds of hours of content. Not the most polished, but endless.", lvl:3, with:"long haul"},
+      {name:"Arcane Odyssey", desc:"A story-driven open world from the developer behind Adventure Story — real writing, real exploration, real stakes.", lvl:5, with:"solo"},
+      {name:"Adventure Story", desc:"A cult-classic single-player adventure with genuine narrative ambition, rare for the platform.", lvl:4, with:"solo"},
+      {name:"Project Slayers", desc:"An anime-inspired demon-fighting RPG with breathing styles and clan mechanics that reward real practice.", lvl:4, with:"solo"},
+      {name:"Shindo Life", desc:"A ninja-world RPG with a massive move list and village system. One of the longest-running anime RPGs on the platform.", lvl:3, with:"solo"},
+      {name:"World Zero", desc:"A class-based RPG with real dungeon and raid content — closer to a mini MMO than most Roblox games attempt.", lvl:4, with:"group"},
+      {name:"Peroxide", desc:"A Bleach-inspired RPG with soul-reaper and hollow mechanics, built for players who want deep combat systems.", lvl:4, with:"solo"},
+      {name:"Type Soul", desc:"Another Bleach-inspired RPG, focused on PvP-driven progression and clan-based power builds.", lvl:4, with:"solo / group"},
+      {name:"Elemental Battlegrounds", desc:"Pick an element, learn its moveset, and fight across changing maps. Simple concept, high skill ceiling.", lvl:3, with:"solo"},
+      {name:"Ninja Legends", desc:"A ninja-training simulator-RPG hybrid with pets, worlds, and a satisfying long-term grind.", lvl:3, with:"solo"},
+      {name:"Dungeon Quest", desc:"A dungeon-crawler with real loot systems and boss fights — one of the earlier games to do RPG progression well.", lvl:3, with:"solo / group"},
+      {name:"Ro-Ghoul", desc:"A Tokyo Ghoul-inspired RPG about balancing human and ghoul powers, with real PvP stakes.", lvl:3, with:"solo"},
+    ]
+  },
+  {
+    cat: "strategy", catLabel: "Strategy / Tower Defense",
+    games: [
+      {name:"Tower Defense Simulator", desc:"Classic tower defense with co-op, deep tower upgrades, and seasonal events. A formula that's held up for years.", lvl:4, with:"1-4 players"},
+      {name:"Anime Adventures [AA]", desc:"Tower defense with anime characters as your 'units'. Part collecting, part strategy, constantly updated.", lvl:4, with:"solo"},
+      {name:"Tower Heroes", desc:"A mix of TD and MOBA — you don't just place towers, you actively control a hero too. More underrated than it deserves.", lvl:4, with:"group"},
+      {name:"All Star Tower Defense", desc:"A huge roster of anime-crossover units with real strategic depth in team-building.", lvl:3, with:"solo"},
+      {name:"Recoil", desc:"A commander sim where you build robotic armies and plan real strategies. Rare depth for the platform.", lvl:4, with:"solo"},
+      {name:"Tower Battles", desc:"A no-frills, mechanically solid tower defense game that's stayed a community favorite for years.", lvl:3, with:"solo / group"},
+      {name:"Miner's Haven", desc:"An idle-strategy base builder about optimizing conveyor belts and machines for profit. Deep systems for min-maxers.", lvl:4, with:"solo"},
+      {name:"Anime Last Stand", desc:"A tower-defense game with anime-inspired units and a fast-paced upgrade loop that keeps runs short and replayable.", lvl:3, with:"solo"},
+      {name:"World at War", desc:"A country-conquest strategy game — build armies, form alliances, declare wars, and try to build the strongest empire on the map.", lvl:4, with:"solo / server"},
+      {name:"Protect the Border", desc:"A co-op checkpoint-defense game — check IDs, search vehicles, and survive escalating night waves as a border patrol squad.", lvl:3, with:"1-4 players"},
+    ]
+  },
+  {
+    cat: "open", catLabel: "Open World / Social",
+    games: [
+      {name:"Welcome to Bloxburg", desc:"A life sim and house-building game with surprising depth. The closest Roblox gets to The Sims.", lvl:4, with:"solo / friends"},
+      {name:"Jailbreak", desc:"Cops vs. robbers in an open city — heists, chases, prison breaks. An old-timer that's still fun and still updated.", lvl:4, with:"group"},
+      {name:"Islands", desc:"Island building and development with mechanics that echo Minecraft, but with Roblox's pace and economy.", lvl:3, with:"solo / friends"},
+      {name:"Emergency Response: Liberty County", desc:"Police/fire/medical roleplay in a living city. For people who like to take roleplay seriously.", lvl:3, with:"group"},
+      {name:"Brookhaven RP", desc:"A free-roam roleplay town — no set objective, just houses, cars, and whatever story you make up.", lvl:3, with:"friends"},
+      {name:"Adopt Me!", desc:"A pet-collecting and trading game with a genuinely huge, active economy. Divisive, but undeniably well-built as a social space.", lvl:3, with:"friends"},
+      {name:"Royale High", desc:"A fashion and campus-life roleplay game with a strong aesthetic identity and dedicated community.", lvl:3, with:"friends"},
+      {name:"Prison Life", desc:"One of the originals — cops, inmates, and a jailbreak loop that's been copied by half the platform since.", lvl:3, with:"group"},
+      {name:"Livetopia", desc:"A city roleplay game with a big open map and constant seasonal content updates.", lvl:3, with:"friends"},
+      {name:"Berry Avenue RP", desc:"A detailed house-and-town roleplay game with strong build quality and an active community.", lvl:3, with:"friends"},
+      {name:"Southwest Florida", desc:"A driving-and-roleplay game centered on realistic cars and a laid-back open map.", lvl:3, with:"friends"},
+      {name:"Greenville", desc:"A car-focused roleplay game with genuinely detailed vehicle models and a relaxed small-town map.", lvl:4, with:"friends"},
+      {name:"Robloxian High School", desc:"A school-life roleplay game with classes, activities, and a genuinely large, detailed campus map.", lvl:3, with:"friends"},
+      {name:"Pls Donate", desc:"A minimalist hangout game built entirely around trading, donating, and showing off cosmetics. Simple concept, huge community.", lvl:2, with:"friends"},
+      {name:"Twilight Daycare", desc:"A long-running roleplay game where you play a baby or caretaker, join a family, and decorate your own space. Huge, dedicated community.", lvl:3, with:"friends"},
+      {name:"Pets VS Police", desc:"A prison-escape game where pets break out of jail, rob stores, and outrun the cops — chaotic cops-and-robbers energy with an animal twist.", lvl:3, with:"group"},
+      {name:"RUNAWAYS", desc:"An open-world crime-escape game — rob, pawn loot, crack vaults, and make a break for the border before the police catch you.", lvl:3, with:"solo / crew"},
+    ]
+  },
+  {
+    cat: "sim", catLabel: "Simulators Worth Playing",
+    games: [
+      {name:"Bee Swarm Simulator", desc:"A collecting sim with real depth — quests, bosses, co-op. Proof that a simulator can be packed with content.", lvl:5, with:"solo"},
+      {name:"A Universal Time", desc:"An anime-inspired combat simulator with worlds, powers, and a prestige system that actually earns its place.", lvl:4, with:"solo"},
+      {name:"Anime Fighting Simulator", desc:"A fighting simulator with real training mechanics and boss raids layered on top of the usual grind.", lvl:3, with:"solo"},
+      {name:"Saber Simulator", desc:"A lightsaber-collecting simulator with pets and worlds — lighter and more casual than most in the genre.", lvl:3, with:"solo"},
+      {name:"Mining Simulator 2", desc:"A mining-and-pet simulator with real exploration between the grind — hidden areas, bosses, secrets.", lvl:3, with:"solo"},
+      {name:"Pet Simulator 99", desc:"A huge-scale pet collecting simulator with an enormous, actively updated map to explore.", lvl:3, with:"solo"},
+      {name:"Sword Fighters Simulator", desc:"A straightforward sword-upgrading simulator with satisfying numbers-go-up progression and PvP zones.", lvl:3, with:"solo"},
+      {name:"Ability Wars", desc:"A simulator-meets-fighting game where you collect and combine wild, often ridiculous powers.", lvl:3, with:"solo / group"},
+      {name:"Slime Simulator", desc:"A calm collecting simulator about growing and combining slimes — low-stress and easy to pick up and put down.", lvl:2, with:"solo"},
+      {name:"Punching Simulator", desc:"A minimalist strength-training simulator — simple loop, but well-paced progression keeps it satisfying.", lvl:2, with:"solo"},
+      {name:"Muscle Legends", desc:"A strength-training simulator with real gyms, competitions, and a surprisingly deep gear system.", lvl:3, with:"solo"},
+      {name:"Needle in a Haystack", desc:"A patience-testing search simulator — dig through a massive procedural haystack with upgradeable detectors to find rare needles.", lvl:2, with:"solo"},
+      {name:"Catch 1 Billion Ducks", desc:"A duck-hunting simulator with a loyal dog companion — shoot, collect, sell, and upgrade your gear across increasingly aggressive flocks.", lvl:3, with:"solo / group"},
+      {name:"Clean the Golf Yard", desc:"A satisfying collector sim — clear a golf course buried in balls, sell your haul, and upgrade your equipment to work faster.", lvl:2, with:"solo / friends"},
+    ]
+  },
+  {
+    cat: "sports", catLabel: "Sports / Racing",
+    games: [
+      {name:"Build a Football Squad", desc:"A competitive football game with responsive controls, team play, and room for real mechanical skill.", lvl:4, with:"squads"},
+      {name:"Basketball: Zero", desc:"Surprisingly deep basketball gameplay with fluid animations and skill-based shooting — quality that outpaces its player count.", lvl:4, with:"1v1 / squads"},
+      {name:"Volleyball Legends", desc:"A fast-paced volleyball game with real timing mechanics and a satisfying competitive ladder.", lvl:3, with:"squads"},
+      {name:"Speed Run 4", desc:"A parkour speedrunning classic — dozens of levels built purely around movement mastery and time trials.", lvl:3, with:"solo"},
+      {name:"Vehicle Legends", desc:"Vehicle collecting and driving with respectable physics. Not another 'click for cash' game — there's real skill here.", lvl:4, with:"solo / racing"},
+      {name:"Ultimate Driving", desc:"An open-world driving game with real traffic rules and a surprisingly serious roleplay community around it.", lvl:3, with:"solo / friends"},
+      {name:"Car Crushers 2", desc:"A sandbox car game about buying, testing, and yes, destroying an enormous roster of vehicles.", lvl:3, with:"solo"},
+      {name:"Driving Empire", desc:"A driving simulator with realistic handling and a huge, growing car catalog for people who care about cars.", lvl:3, with:"solo"},
+      {name:"Roblox Formula 1 World Series", desc:"A racing game with genuine track design, competitive driving, and Formula 1-inspired events.", lvl:3, with:"squads"},
+    ]
+  },
+  {
+    cat: "obby", catLabel: "Obby / Parkour",
+    games: [
+      {name:"Tower of Hell", desc:"A brutal, randomly-generated obby tower that resets constantly. Short sessions, high tension, addictive difficulty curve.", lvl:4, with:"solo"},
+      {name:"Mega Fun Obby", desc:"A massive, checkpoint-based obby with hundreds of stages — the genre's reliable long-haul option.", lvl:3, with:"solo"},
+      {name:"Flee the Facility", desc:"A hide-and-escape game with real parkour mechanics for the escaping side. Tense and quick to replay.", lvl:4, with:"group"},
+      {name:"Natural Disaster Survival", desc:"A survival game where you react to changing environmental disasters each round. A genuine classic that still holds up.", lvl:3, with:"group"},
+      {name:"Epic Minigames", desc:"A rotating playlist of quick minigames, closer to a party-game collection than one single format.", lvl:3, with:"group"},
+      {name:"Slippery Stairs", desc:"A precision obstacle course about climbing dangerous, shifting routes and reaching the top without falling.", lvl:3, with:"solo"},
+    ]
+  },
+  {
+    cat: "tycoon", catLabel: "Tycoon / Building",
+    games: [
+      {name:"Theme Park Tycoon 2", desc:"A genuinely deep park-building sim with real ride design tools — closer to a real park sim than a typical tycoon.", lvl:5, with:"solo"},
+      {name:"Restaurant Tycoon 2", desc:"A restaurant-management sim with real staffing, layout, and customer-flow mechanics to optimize.", lvl:4, with:"solo / friends"},
+      {name:"Lumber Tycoon 2", desc:"A trading-and-crafting tycoon built around a real in-game economy and player-driven markets.", lvl:4, with:"solo"},
+      {name:"Retail Tycoon 2", desc:"A store-building tycoon about layout, stock, and pricing strategy — more thoughtful than the average tycoon loop.", lvl:3, with:"solo"},
+      {name:"Mad City", desc:"A hero-vs-villain open city with tycoon-style bases and objectives layered on top of free roam.", lvl:3, with:"group"},
+      {name:"Pizza Factory Tycoon", desc:"A fast-paced factory-building tycoon about automating pizza production lines efficiently.", lvl:3, with:"solo"},
+      {name:"Zoo Tycoon", desc:"A zoo-building and management game with real animal care systems and park design decisions.", lvl:3, with:"solo / friends"},
+      {name:"Mansion Tycoon", desc:"Build and expand a luxurious property, unlock new areas, and grow your tycoon through steady upgrades.", lvl:3, with:"solo"},
+      {name:"Car Dealership Tycoon", desc:"A car-trading tycoon with real detailing, customization, and a genuinely deep vehicle economy.", lvl:3, with:"solo"},
+      {name:"Sell Lemons", desc:"An incremental tycoon about building a lemon-selling empire from a single dollar — layered rebirth and evolution systems keep the grind interesting.", lvl:3, with:"solo"},
+    ]
+  },
+  {
+    cat: "puzzle", catLabel: "Puzzle / Escape",
+    games: [
+      {name:"Identity Fraud", desc:"A tense escape game about finding your way out of a shifting, unsettling house — part puzzle, part horror.", lvl:4, with:"solo / group"},
+      {name:"Escape Room", desc:"A rotating set of themed escape rooms with genuine logic puzzles, built for playing with friends.", lvl:3, with:"1-4 players"},
+      {name:"Find the Markers", desc:"A long-running hide-and-seek exploration series about finding hidden collectibles across sprawling maps.", lvl:2, with:"solo / group"},
+    ]
+  },
+  {
+    cat: "music", catLabel: "Music / Rhythm",
+    games: [
+      {name:"Robeats!", desc:"A genuine rhythm game with a real note-chart system, closely modeled on dedicated rhythm-game genres.", lvl:4, with:"solo"},
+      {name:"Dance Off!", desc:"A rhythm-and-performance game about nailing dance moves on beat — simple to pick up, satisfying at higher difficulty.", lvl:3, with:"solo / group"},
+    ]
+  },
+  {
+    cat: "sandbox", catLabel: "Building / Sandbox",
+    games: [
+      {name:"Build A Boat For Treasure", desc:"A physics-based building game where your boat design directly determines how far you can explore. Creative and genuinely challenging.", lvl:4, with:"solo / group"},
+      {name:"Booga Booga", desc:"A survival sandbox about gathering, crafting, and building shelter in an open island world — slower-paced and more thoughtful than most survival games.", lvl:3, with:"solo / group"},
+      {name:"Work at a Pizza Place", desc:"A classic job-roleplay sandbox — genuinely one of the platform's most influential social sims, still active today.", lvl:3, with:"friends"},
+    ]
+  },
+  {
+    cat: "misc", catLabel: "More Worth Trying",
+    games: [
+      {name:"Violent Party", desc:"A chaotic party-machine game — collecting items and wild mini-games with friends.", lvl:3, with:"group"},
+      {name:"Mukbang Game", desc:"An eating/ASMR simulator — order hundreds of foods and eat them in first person with realistic sounds. Weird and addictive at once.", lvl:3, with:"solo"},
+      {name:"Generic Cooking Game", desc:"A cozy cooking-themed experience — good for a lower-key, relaxed session.", lvl:3, with:"solo"},
+      {name:"Cineblox", desc:"A movie/theater-themed hangout space to watch and socialize in.", lvl:3, with:"friends"},
+      {name:"Climb a Mountain", desc:"A physical climbing challenge game — quick to jump into, satisfying to master.", lvl:3, with:"solo"},
+      {name:"Drain The Lake", desc:"A treasure-hunting game about draining a lake to see — and grab — whatever's hidden underneath.", lvl:3, with:"solo / friends"},
+      {name:"RV Chaos", desc:"A chaotic vehicle-based game centered on an RV and everything that goes wrong in one.", lvl:3, with:"friends"},
+      {name:"SevenM Hood Testing", desc:"An open-world 'hood' experience with genuine map detail and exploration mechanics.", lvl:2, with:"solo / group"},
+      {name:"Mulberry County", desc:"An atmospheric small-town horror game with a strong sense of dread and a devoted following.", lvl:4, with:"solo / group"},
+      {name:"Dead Silence [Horror]", desc:"A survival-horror game built around isolation, investigation, and tense supernatural encounters.", lvl:3, with:"solo / group"},
+      {name:"Hatman", desc:"A cult-classic horror game with a distinct visual style and a surprisingly loyal long-term community.", lvl:3, with:"solo / group"},
+      {name:"The Muerto County Massacre", desc:"A slasher-inspired horror game riffing on classic horror movie tropes.", lvl:3, with:"group"},
+      {name:"Scorched Earth", desc:"A build-and-shoot sandbox where you can dig tunnels and build massive forts — Minecraft energy with Roblox combat.", lvl:4, with:"group"},
+      {name:"Land or Die", desc:"A chaotic co-op plane-survival game — the pilot's out, and your crew has to repair systems, calm passengers, and land safely before disaster strikes.", lvl:4, with:"crew"},
+      {name:"Burgerz", desc:"Run a chaotic burger joint, survive raids, and keep the shop upgraded — equal parts cooking game and survival horror.", lvl:3, with:"solo / friends"},
+      {name:"AI Judge", desc:"A fast party game show — answer a random scenario in 30 seconds and let an AI judge decide who's funnier, smarter, or weirder.", lvl:3, with:"group"},
+      {name:"Cheating During Testing", desc:"A tense stealth game about copying answers without the teacher noticing — reading gaze patterns and timing every risky move.", lvl:3, with:"group"},
+      {name:"Survive 7 Days In Arctic", desc:"A co-op survival game about outlasting the frozen wilderness — build shelter, keep a fire burning, and fish for food until rescue arrives.", lvl:3, with:"solo / friends"},
+      {name:"Bumpy Flight", desc:"A co-op aviation game — prep the aircraft, load luggage, handle mid-flight emergencies, and land your crew safely together.", lvl:3, with:"crew"},
+    ]
+  },
+  {
+    cat: "community", catLabel: "Community Picks",
+    games: [
+      {name:"Murder Mystery 2", desc:"A classic social deduction round: identify the murderer, survive the round, or solve the case before it is too late.", lvl:4, with:"group"},
+      {name:"Evade", desc:"Run, slide, and use the map to escape relentless nextbots in a fast multiplayer survival game.", lvl:4, with:"group"},
+      {name:"Rainbow Friends", desc:"A colorful story-driven survival game where a group must complete tasks while avoiding strange creatures.", lvl:3, with:"group"},
+      {name:"Dandy's World", desc:"A tense mascot-survival experience built around teamwork, objectives, and escaping dangerous cartoon creatures.", lvl:4, with:"group"},
+      {name:"Survive the Killer", desc:"Hide, rescue teammates, and escape the killer in short horror rounds with simple rules and sharp tension.", lvl:3, with:"group"},
+      {name:"The Intruder", desc:"A focused analog-horror experience about watching the house, managing danger, and surviving the night.", lvl:4, with:"solo"},
+      {name:"Break In", desc:"Defend your house, gather supplies, and survive a strange invasion in a story-based co-op adventure.", lvl:3, with:"group"},
+      {name:"The Floor Is LAVA!", desc:"A quick party game where players scramble for high ground before the floor becomes dangerous.", lvl:3, with:"group"},
+      {name:"Murder Mystery DUELS", desc:"A fast social mystery duel experience focused on deduction, quick rounds, and reading your opponent.", lvl:3, with:"1v1"},
+      {name:"Flicker", desc:"A social deduction game of hidden roles, night actions, and careful decisions across tense rounds.", lvl:4, with:"group"},
+      {name:"Loomian Legacy", desc:"A creature-collecting RPG with exploration, turn-based battles, story quests, and a large world to discover.", lvl:4, with:"solo / group"},
+      {name:"Vesteria", desc:"A colorful open-world MMORPG with classes, dungeons, quests, and a satisfying progression system.", lvl:4, with:"solo / group"},
+      {name:"Pilgrammed", desc:"A challenging open-world RPG focused on exploration, unusual builds, bosses, and discovering secrets.", lvl:4, with:"solo"},
+      {name:"Creatures of Sonaria", desc:"Grow and survive as unique creatures in a persistent ecosystem built around exploration and player interaction.", lvl:4, with:"solo / group"},
+      {name:"Dragon Adventures", desc:"Raise dragons, explore fantasy worlds, build a base, and trade rare creatures with other players.", lvl:3, with:"solo / friends"},
+      {name:"Elemental Dungeons", desc:"Fight through replayable dungeons, collect elemental abilities, and build a stronger combat loadout.", lvl:4, with:"group"},
+      {name:"Treasure Quest", desc:"Clear dungeons, defeat bosses, and collect a huge range of gear in a simple, satisfying action RPG.", lvl:3, with:"solo / group"},
+      {name:"Rogue Demon", desc:"A fast anime-inspired combat game focused on precise movement, abilities, and skill-based duels.", lvl:4, with:"1v1 / squads"},
+      {name:"Fishing Simulator", desc:"Travel between islands, catch rare fish, upgrade your gear, and slowly build a collection.", lvl:3, with:"solo / friends"},
+      {name:"Strongman Simulator", desc:"Train strength through a clear progression loop, unlock new areas, and compete with friends.", lvl:2, with:"solo / group"},
+      {name:"Bubble Gum Simulator INFINITY", desc:"A polished collecting simulator with pets, worlds, upgrades, and a long progression path.", lvl:3, with:"solo"},
+      {name:"Pet Catchers", desc:"Explore a large world, catch pets, complete quests, and improve your collection through steady upgrades.", lvl:3, with:"solo / friends"},
+      {name:"Legends Re:Written", desc:"An anime-inspired action RPG with open areas, bosses, abilities, and long-term character progression.", lvl:3, with:"solo / group"},
+      {name:"Soccer League", desc:"A competitive soccer game with responsive controls, team play, and room for real mechanical skill.", lvl:4, with:"squads"},
+      {name:"Hoops Life", desc:"A street basketball experience with courts, builds, and skill-based matches against other players.", lvl:3, with:"squads"},
+      {name:"Midnight Racing: Tokyo", desc:"A serious open-road racing experience with detailed cars, night routes, and a strong driving atmosphere.", lvl:4, with:"solo / racing"},
+      {name:"Driving Simulator", desc:"Cruise through a large city, collect cars, and improve your driving setup in a relaxed multiplayer world.", lvl:3, with:"solo / friends"},
+      {name:"Legends Of Speed", desc:"Race through bright worlds, collect trails, and improve your speed through quick repeatable runs.", lvl:3, with:"solo"},
+      {name:"Obby Creator", desc:"Build, publish, and play obstacle courses made by the community with a flexible creation toolkit.", lvl:4, with:"solo / group"},
+      {name:"Flood Escape 2", desc:"Escape rising water through compact obstacle courses that reward timing, routes, and teamwork.", lvl:4, with:"group"},
+      {name:"Parkour", desc:"Move through a detailed city with wall runs, vaults, and momentum-based traversal challenges.", lvl:4, with:"solo"},
+      {name:"Obby But You're on a Bike", desc:"A playful obstacle course where bike control and precise movement are the entire challenge.", lvl:3, with:"solo"},
+      {name:"Rate My Avatar", desc:"Show off your outfit, rate other players, and browse a constantly changing stream of avatar ideas.", lvl:2, with:"friends"},
+      {name:"Catalog Avatar Creator", desc:"Try on an enormous catalog of avatar items, build outfits, and experiment with different looks.", lvl:3, with:"solo / friends"},
+      {name:"Chat Ragdoll Voice Hangout", desc:"A social voice-chat hangout for meeting people, talking, and spending time in a casual space.", lvl:2, with:"friends"},
+      {name:"Club Roblox", desc:"Build a home, care for pets, and socialize in a colorful life-sim world with regular activities.", lvl:3, with:"friends"},
+      {name:"RoCitizens", desc:"Live a customizable city life with jobs, homes, vehicles, and roleplay built around player choice.", lvl:3, with:"friends"},
+      {name:"MeepCity", desc:"A long-running social world focused on houses, fishing, parties, and hanging out with other players.", lvl:3, with:"friends"},
+      {name:"Plane Crazy", desc:"Design aircraft and machines from modular parts, then test them in a physics-driven sandbox.", lvl:4, with:"solo / group"},
+      {name:"Build Island", desc:"Gather materials, expand an island, and build a personal space through a relaxed creative progression loop.", lvl:3, with:"solo / friends"},
+      {name:"My Restaurant!", desc:"Design a restaurant, serve customers, hire staff, and optimize the layout as your business grows.", lvl:3, with:"solo / friends"},
+      {name:"Airport Tycoon", desc:"Build and expand an airport, manage terminals and runways, and grow a busy travel hub over time.", lvl:3, with:"solo"},
+      {name:"The Night Shift Experience", desc:"Investigate a strange night shift and survive what happens after closing time.", lvl:3, with:"solo / friends"},
+      {name:"Noobs Pizza Place Revival 2017", desc:"A community-style pizza job roleplay experience with serving, building, and social play.", lvl:2, with:"friends"},
+      {name:"SCP: Roleplay", desc:"Explore a detailed containment facility and choose a role in a large, structured SCP roleplay experience.", lvl:4, with:"group"},
+      {name:"STARBASIS", desc:"Build, explore, and survive in a science-fiction sandbox where players shape the world together.", lvl:3, with:"group"},
+      {name:"Innovation Inc. Spaceship", desc:"Explore a detailed spaceship, investigate systems, and survive unexpected events with a crew.", lvl:3, with:"group"},
+      {name:"Arcane Reborn", desc:"Explore a fantasy world, master magic, and take on dangerous encounters in an action RPG setting.", lvl:3, with:"solo / group"},
+      {name:"H2O Mermaids Island", desc:"Explore a colorful island world, discover new areas, and enjoy a relaxed fantasy adventure with other players.", lvl:3, with:"solo / group"},
+      {name:"The Wild West", desc:"Explore a frontier map, take jobs, ride across the wilderness, and decide how you want to make your name.", lvl:4, with:"solo / group"},
+      {name:"Fantastic Frontier", desc:"Travel through a colorful open world, collect resources, complete quests, and uncover strange places.", lvl:3, with:"solo / group"},
+      {name:"Bloxy Water Park", desc:"Explore a detailed waterpark, try slides and pools, and spend a relaxed session discovering hidden areas.", lvl:3, with:"friends"},
+    ]
+  },
+];
+
+const ACCENTS = ["#f4e04d","#ff6b8a","#8b7ad1","#5ce6a6","#66c7ff","#ff9f5b","#c792ea","#7ee787","#ffb1e0","#6bd9c9","#ffd166","#a0e7e5","#f7a072"];
+const accentFor = cat => ACCENTS[DATA.findIndex(s=>s.cat===cat) % ACCENTS.length];
+const slugify = name => name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const COMMUNITY_CATEGORY_GROUPS = {
+  horror:['Murder Mystery 2','Murder Mystery DUELS','Evade','Rainbow Friends',"Dandy's World",'Survive the Killer','The Intruder','Break In','The Floor Is LAVA!','Flicker'],
+  rpg:['Loomian Legacy','Vesteria','Pilgrammed','Creatures of Sonaria','Dragon Adventures','Elemental Dungeons','Treasure Quest','Rogue Demon','Legends Re:Written','Arcane Reborn','H2O Mermaids Island','The Wild West','Fantastic Frontier'],
+  sim:['Fishing Simulator','Strongman Simulator','Bubble Gum Simulator INFINITY','Pet Catchers'],
+  sports:['Soccer League','Hoops Life','Midnight Racing: Tokyo','Driving Simulator','Legends Of Speed'],
+  obby:['Obby Creator','Flood Escape 2','Parkour',"Obby But You're on a Bike"],
+  open:['Rate My Avatar','Catalog Avatar Creator','Chat Ragdoll Voice Hangout','Club Roblox','RoCitizens','MeepCity','SCP: Roleplay','STARBASIS','Innovation Inc. Spaceship','Bloxy Water Park'],
+  tycoon:['My Restaurant!','Airport Tycoon','The Night Shift Experience','Noobs Pizza Place Revival 2017'],
+  sandbox:['Plane Crazy','Build Island'],
+  misc:['SCP: Roleplay','Starbase','Innovation Inc. Spaceship']
+};
+const communitySectionIndex = DATA.findIndex(section => section.cat === 'community');
+if(communitySectionIndex !== -1){
+  const communityGames = DATA[communitySectionIndex].games;
+  const assigned = new Set();
+  Object.entries(COMMUNITY_CATEGORY_GROUPS).forEach(([category, names]) => {
+    const target = DATA.find(section => section.cat === category);
+    if(!target) return;
+    names.forEach(name => {
+      const game = communityGames.find(item => item.name === name);
+      if(game && !assigned.has(name)){
+        target.games.push(game);
+        assigned.add(name);
+      }
+    });
+  });
+  const miscSection = DATA.find(section => section.cat === 'misc');
+  communityGames.forEach(game => {
+    if(!assigned.has(game.name)) miscSection.games.push(game);
+  });
+  DATA.splice(communitySectionIndex, 1);
+}
+const GAME_UNIVERSE_IDS = JSON.parse(localStorage.getItem('robloxUniverseIds') || '{}');
+const GAME_IMAGES = JSON.parse(localStorage.getItem('robloxGameImages') || '{}');
+const GAME_ALIASES = {
+  'mocker-horror': 3249123901,
+  'face-your-fears-a-phobia-game': 4437488221,
+  'murder-mystery-2': 66654135,
+  'murder-mystery-duels': 7856039629,
+  'legends-re-written': 2270890905,
+  'h2o-mermaids-island': 6659394758,
+  'anime-adventures-aa': 3183403065,
+  'chat-ragdoll-voice-hangout': 10446291786,
+  'starbasis': 2038883469,
+  'bloxy-water-park': 3874877728,
+  'build-a-football-squad': 10331015398,
+  'roblox-formula-1-world-series': 8895953154,
+  'soccer-league': 1776240356,
+  'legends-of-speed': 1119466531,
+  'slippery-stairs': 7030416430,
+  'mansion-tycoon': 4518160318,
+  'the-night-shift-experience': 4507204989,
+  'noobs-pizza-place-revival-2017': 8840891918,
+  'generic-cooking-game': 4579085368,
+  'dead-silence-horror': 5924878,
+  'the-muerto-county-massacre': 9933703300,
+  'protect-the-border': 10423774136,
+  'slime-simulator': 3603184994,
+  'punching-simulator': 4924516231,
+  'hatman': 7477645612
+};
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+async function robloxJson(url){
+  for(let attempt = 0; attempt < 4; attempt++){
+    const response = await fetch(url);
+    if(response.status !== 429) return response.ok ? response.json() : null;
+    await wait(700 * (attempt + 1));
+  }
+  return null;
+}
+
+function cleanGameName(name){
+  return name.toLowerCase()
+    .replace(/\[[^\]]*\]/g,' ')
+    .replace(/[🎮🏆🔫🧤🖐️🎵⭐]/gu,' ')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim();
+}
+
+async function resolveUniverseId(game){
+  const slug = slugify(game.name);
+  if(GAME_ALIASES[slug]){
+    GAME_UNIVERSE_IDS[slug] = GAME_ALIASES[slug];
+    localStorage.setItem('robloxUniverseIds', JSON.stringify(GAME_UNIVERSE_IDS));
+    return GAME_ALIASES[slug];
+  }
+  if(GAME_UNIVERSE_IDS[slug]) return GAME_UNIVERSE_IDS[slug];
+  try{
+    const query = encodeURIComponent(game.name);
+    const data = await robloxJson(`https://apis.roblox.com/search-api/omni-search?searchQuery=${query}&pageType=all&sessionId=web`);
+    if(!data) return null;
+    const results = data?.searchResults?.flatMap(group => group.contents || []) || [];
+    const wanted = cleanGameName(game.name);
+    const exact = results.find(item => {
+      if(!item.universeId) return false;
+      const resultName = cleanGameName(item.name || '');
+      return resultName === wanted || resultName.startsWith(`${wanted} `);
+    });
+    if(!exact?.universeId) return null;
+    GAME_UNIVERSE_IDS[slug] = exact.universeId;
+    localStorage.setItem('robloxUniverseIds', JSON.stringify(GAME_UNIVERSE_IDS));
+    return exact.universeId;
+  }catch(error){
+    return null;
+  }
+}
+
+async function loadGameImage(game){
+  const slug = slugify(game.name);
+  if(GAME_IMAGES[slug]) return GAME_IMAGES[slug];
+  const universeId = await resolveUniverseId(game);
+  if(!universeId) return null;
+  try{
+    const data = await robloxJson(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=420x420&format=Png&isCircular=false`);
+    if(!data) return null;
+    const imageUrl = data?.data?.[0]?.imageUrl || null;
+    if(imageUrl){
+      GAME_IMAGES[slug] = imageUrl;
+      localStorage.setItem('robloxGameImages', JSON.stringify(GAME_IMAGES));
+    }
+    return imageUrl;
+  }catch(error){
+    return null;
+  }
+}
+
+async function loadVisibleGameImages(){
+  const targets = [...document.querySelectorAll('.section:not(.hidden) [data-game-slug]')];
+  let cursor = 0;
+  const worker = async () => {
+    while(cursor < targets.length){
+      const target = targets[cursor++];
+      const section = DATA.find(item => item.cat === target.dataset.cat);
+      const game = section?.games?.[Number(target.dataset.idx)];
+      const imageUrl = game && await loadGameImage(game);
+      if(imageUrl){
+        target.classList.remove('no-img');
+        target.innerHTML = `<img src="${imageUrl}" alt="${game.name}" loading="lazy">`;
+      } else {
+        target.textContent = translatedName(game.name);
+      }
+    }
+  };
+  await Promise.all([worker(), worker(), worker()]);
+}
+
+
+/* ---------- I18N ---------- */
+const I18N = {
+  en:{ eyebrow:"human curated // not the algorithm",
+    heroHtml:'Skip the <span class="accent">slop.</span><br>Play something good.',
+    sub:"Every game here was picked by hand, not because it's trending, but because it's actually worth your time. No generic simulators, no clones, no brainrot.",
+    statGames:"curated picks", statCats:"categories", statBrainrot:"brainrot",
+    all:"All", games:"games", playNow:"Play now →",
+    topRated:"Your Top Rated", topRatedEmpty:"Rate a few games (tap the stars) to build your own top list.",
+    logoHtml:"actually good<br>roblox games to play", modalHint:"Open {game} directly in Roblox.", playOnRoblox:"Play on Roblox →",
+    footerCredit:"A hand-picked list, updated over time — every game here earns its spot on quality, not hashtags.",
+    footerMade:"BUILT BY ONE DEVELOPER, AGAINST THE NOISE.",
+    ratingsNote:"Ratings are saved on your device only." },
+  he:{ eyebrow:"קיוריישן אנושי // לא אלגוריתם",
+    heroHtml:'דלגו על <span class="accent">הזבל.</span><br>שחקו במשהו טוב.',
+    sub:"כל משחק כאן נבחר ידנית, לא כי הוא ויראלי, אלא כי הוא באמת שווה את הזמן שלכם. בלי סימולטורים גנריים, בלי קלונים, בלי בריינרוט.",
+    statGames:"משחקים נבחרים", statCats:"קטגוריות", statBrainrot:"בריינרוט",
+    all:"הכול", games:"משחקים", playNow:"שחקו עכשיו ←",
+    topRated:"המשחקים המדורגים שלך", topRatedEmpty:"דרגו כמה משחקים (לחצו על הכוכבים) כדי לבנות רשימת מועדפים אישית.",
+    logoHtml:"משחקי רובלוקס<br>שבאמת טובים", modalHint:"פתחו את {game} ישירות ברובלוקס.", playOnRoblox:"שחקו ברובלוקס ←",
+    footerCredit:"רשימה שנבחרת ידנית, מתעדכנת עם הזמן — כל משחק כאן הרוויח את מקומו באיכות, לא בהאשטגים.",
+    footerMade:"נבנה על ידי מפתח אחד, נגד הרעש.",
+    ratingsNote:"הדירוגים נשמרים רק במכשיר שלכם." },
+  es:{ eyebrow:"curado a mano // no por algoritmo",
+    heroHtml:'Olvídate de la <span class="accent">basura.</span><br>Juega algo bueno.',
+    sub:"Cada juego aquí fue elegido a mano, no por ser tendencia, sino porque realmente vale tu tiempo. Sin simuladores genéricos, sin clones, sin basura.",
+    statGames:"selecciones", statCats:"categorías", statBrainrot:"basura",
+    all:"Todos", games:"juegos", playNow:"Jugar ahora →",
+    topRated:"Tus mejor valorados", topRatedEmpty:"Valora algunos juegos (toca las estrellas) para crear tu propia lista.",
+    logoHtml:"juegos de roblox<br>que sí valen la pena", modalHint:"Abre {game} directamente en Roblox.", playOnRoblox:"Jugar en Roblox →",
+    footerCredit:"Una lista curada a mano, actualizada con el tiempo — cada juego se gana su lugar por calidad, no por hashtags.",
+    footerMade:"CREADO POR UN SOLO DESARROLLADOR, CONTRA EL RUIDO.",
+    ratingsNote:"Las valoraciones se guardan solo en tu dispositivo." },
+  fr:{ eyebrow:"sélection humaine // pas l'algorithme",
+    heroHtml:'Oubliez la <span class="accent">soupe.</span><br>Jouez à un bon jeu.',
+    sub:"Chaque jeu ici a été choisi à la main, pas parce qu'il est tendance, mais parce qu'il mérite vraiment votre temps. Pas de simulateurs génériques, pas de clones.",
+    statGames:"sélections", statCats:"catégories", statBrainrot:"contenu inutile",
+    all:"Tous", games:"jeux", playNow:"Jouer maintenant →",
+    topRated:"Vos mieux notés", topRatedEmpty:"Notez quelques jeux (touchez les étoiles) pour créer votre liste.",
+    logoHtml:"bons jeux roblox<br>à essayer", modalHint:"Ouvrez {game} directement dans Roblox.", playOnRoblox:"Jouer sur Roblox →",
+    footerCredit:"Une liste triée à la main, mise à jour au fil du temps — chaque jeu mérite sa place par sa qualité.",
+    footerMade:"CRÉÉ PAR UN SEUL DÉVELOPPEUR, CONTRE LE BRUIT.",
+    ratingsNote:"Les notes sont enregistrées uniquement sur votre appareil." },
+  pt:{ eyebrow:"curadoria humana // não algoritmo",
+    heroHtml:'Pule a <span class="accent">porcaria.</span><br>Jogue algo bom.',
+    sub:"Cada jogo aqui foi escolhido manualmente, não por ser viral, mas porque realmente vale o seu tempo. Sem simuladores genéricos, sem clones.",
+    statGames:"escolhas", statCats:"categorias", statBrainrot:"porcaria",
+    all:"Todos", games:"jogos", playNow:"Jogar agora →",
+    topRated:"Seus mais bem avaliados", topRatedEmpty:"Avalie alguns jogos (toque nas estrelas) para montar sua lista.",
+    logoHtml:"bons jogos de roblox<br>para jogar", modalHint:"Abra {game} diretamente no Roblox.", playOnRoblox:"Jogar no Roblox →",
+    footerCredit:"Uma lista feita à mão, atualizada com o tempo — cada jogo ganha seu lugar pela qualidade.",
+    footerMade:"CONSTRUÍDO POR UM ÚNICO DESENVOLVEDOR, CONTRA O RUÍDO.",
+    ratingsNote:"As avaliações são salvas apenas no seu dispositivo." },
+  de:{ eyebrow:"von Hand kuratiert // kein Algorithmus",
+    heroHtml:'Überspring den <span class="accent">Müll.</span><br>Spiel etwas Gutes.',
+    sub:"Jedes Spiel hier wurde von Hand ausgewählt, nicht weil es im Trend liegt, sondern weil es deine Zeit wirklich wert ist. Keine generischen Simulatoren, keine Klone.",
+    statGames:"Auswahl", statCats:"Kategorien", statBrainrot:"Brainrot",
+    all:"Alle", games:"Spiele", playNow:"Jetzt spielen →",
+    topRated:"Deine Top-Bewertungen", topRatedEmpty:"Bewerte ein paar Spiele (tippe auf die Sterne), um deine eigene Liste zu erstellen.",
+    logoHtml:"wirklich gute roblox-spiele<br>zum spielen", modalHint:"Öffne {game} direkt in Roblox.", playOnRoblox:"Auf Roblox spielen →",
+    footerCredit:"Eine handverlesene Liste, die mit der Zeit aktualisiert wird — jedes Spiel verdient sich seinen Platz durch Qualität.",
+    footerMade:"GEBAUT VON EINEM ENTWICKLER, GEGEN DAS RAUSCHEN.",
+    ratingsNote:"Bewertungen werden nur auf deinem Gerät gespeichert." },
+  ar:{ eyebrow:"اختيار بشري // ليس خوارزمية",
+    heroHtml:'تجاوز <span class="accent">الضوضاء.</span><br>العب شيئًا جيدًا.',
+    sub:"كل لعبة هنا اختيرت يدويًا، ليس لأنها رائجة، بل لأنها تستحق وقتك فعلًا. بدون ألعاب مكررة أو نسخ متشابهة.",
+    statGames:"اختيارات مختارة", statCats:"فئات", statBrainrot:"ضوضاء",
+    all:"الكل", games:"ألعاب", playNow:"العب الآن ←",
+    topRated:"أفضل ألعابك تقييمًا", topRatedEmpty:"قيّم بعض الألعاب لبناء قائمتك الخاصة.",
+    logoHtml:"ألعاب روبلوكس<br>تستحق اللعب", modalHint:"افتح {game} مباشرة في روبلوكس.", playOnRoblox:"العب على روبلوكس ←",
+    footerCredit:"قائمة مختارة يدويًا وتتطور مع الوقت — كل لعبة هنا تستحق مكانها بسبب جودتها.",
+    footerMade:"بُنيت بواسطة مطور واحد، ضد الضوضاء.",
+    ratingsNote:"يتم حفظ التقييمات على جهازك فقط." },
+  ja:{ eyebrow:"人が選定 // アルゴリズムではありません",
+    heroHtml:'<span class="accent">くだらないゲーム</span>は飛ばして。<br>良いゲームを遊ぼう。',
+    sub:"ここにあるゲームは流行っているからではなく、本当に時間を使う価値があるものを手作業で選びました。",
+    statGames:"厳選ゲーム", statCats:"カテゴリー", statBrainrot:"ノイズ",
+    all:"すべて", games:"ゲーム", playNow:"今すぐ遊ぶ →", topRated:"高評価のゲーム", topRatedEmpty:"ゲームを評価して自分のリストを作りましょう。",
+    logoHtml:"本当に良いロブロックスゲーム<br>を遊ぼう", modalHint:"{game}をRobloxで直接開く。", playOnRoblox:"Robloxで遊ぶ →",
+    footerCredit:"手作業で選ばれたリスト。すべてのゲームが品質で選ばれています。", footerMade:"一人の開発者がノイズに抗って制作。", ratingsNote:"評価はこの端末だけに保存されます。" },
+  zh:{ eyebrow:"人工精选 // 不是算法推荐",
+    heroHtml:'跳过<span class="accent">垃圾游戏。</span><br>去玩点真正好的。',
+    sub:"这里的每款游戏都是手工挑选的，不是因为热门，而是真正值得你花时间。",
+    statGames:"精选游戏", statCats:"分类", statBrainrot:"噪音",
+    all:"全部", games:"游戏", playNow:"立即游玩 →", topRated:"你的高分游戏", topRatedEmpty:"给几款游戏评分，建立你的专属列表。",
+    logoHtml:"真正好玩的 Roblox 游戏<br>精选列表", modalHint:"直接在 Roblox 中打开 {game}。", playOnRoblox:"在 Roblox 中游玩 →",
+    footerCredit:"手工精选并持续更新，每款游戏都凭质量赢得位置。", footerMade:"由一名开发者打造，拒绝噪音。", ratingsNote:"评分只保存在你的设备上。" },
+  ko:{ eyebrow:"사람이 직접 선정 // 알고리즘이 아닙니다",
+    heroHtml:'<span class="accent">별로인 게임</span>은 건너뛰고<br>좋은 게임을 플레이하세요.',
+    sub:"인기 때문이 아니라 정말 시간을 쓸 가치가 있는 게임만 직접 골랐습니다.",
+    statGames:"엄선한 게임", statCats:"카테고리", statBrainrot:"소음",
+    all:"전체", games:"게임", playNow:"지금 플레이 →", topRated:"내 최고 평점 게임", topRatedEmpty:"게임에 평점을 남겨 나만의 목록을 만들어 보세요.",
+    logoHtml:"정말 좋은 Roblox 게임<br>플레이 목록", modalHint:"{game}을(를) Roblox에서 바로 열기.", playOnRoblox:"Roblox에서 플레이 →",
+    footerCredit:"직접 고른 목록입니다. 모든 게임은 품질로 자리를 얻었습니다.", footerMade:"한 명의 개발자가 소음을 넘어 만들었습니다.", ratingsNote:"평점은 이 기기에만 저장됩니다." },
+};
+const CATLABELS = {
+  pvp:{en:"PvP / Combat", he:"קרב / PvP", es:"PvP / Combate", fr:"PvP / Combat", pt:"PvP / Combate", de:"PvP / Kampf", ar:"قتال / PvP", ja:"PvP / 対戦", zh:"PvP / 战斗", ko:"PvP / 전투"},
+  horror:{en:"Horror", he:"אימה", es:"Terror", fr:"Horreur", pt:"Terror", de:"Horror", ar:"رعب", ja:"ホラー", zh:"恐怖", ko:"호러"},
+  rpg:{en:"Adventure / RPG", he:"הרפתקאות / RPG", es:"Aventura / RPG", fr:"Aventure / RPG", pt:"Aventura / RPG", de:"Abenteuer / RPG", ar:"مغامرات / RPG", ja:"アドベンチャー / RPG", zh:"冒险 / RPG", ko:"어드벤처 / RPG"},
+  strategy:{en:"Strategy / Tower Defense", he:"אסטרטגיה / הגנת מגדלים", es:"Estrategia / Tower Defense", fr:"Stratégie / Tower Defense", pt:"Estratégia / Tower Defense", de:"Strategie / Tower Defense", ar:"استراتيجية / دفاع أبراج", ja:"ストラテジー / タワーディフェンス", zh:"策略 / 塔防", ko:"전략 / 타워 디펜스"},
+  open:{en:"Open World / Social", he:"עולם פתוח / חברתי", es:"Mundo Abierto / Social", fr:"Monde Ouvert / Social", pt:"Mundo Aberto / Social", de:"Open World / Sozial", ar:"عالم مفتوح / اجتماعي", ja:"オープンワールド / ソーシャル", zh:"开放世界 / 社交", ko:"오픈 월드 / 소셜"},
+  sim:{en:"Simulators Worth Playing", he:"סימולטורים שבאמת טובים", es:"Simuladores que Valen la Pena", fr:"Simulateurs qui en Valent la Peine", pt:"Simuladores que Valem a Pena", de:"Simulatoren, die sich Lohnen", ar:"محاكاة تستحق اللعب", ja:"遊ぶ価値のあるシミュレーター", zh:"值得玩的模拟器", ko:"할 만한 시뮬레이터"},
+  sports:{en:"Sports / Racing", he:"ספורט / מרוצים", es:"Deportes / Carreras", fr:"Sport / Course", pt:"Esportes / Corrida", de:"Sport / Rennen", ar:"رياضة / سباقات", ja:"スポーツ / レース", zh:"体育 / 竞速", ko:"스포츠 / 레이싱"},
+  obby:{en:"Obby / Parkour", he:"אובי / פארקור", es:"Obby / Parkour", fr:"Obby / Parkour", pt:"Obby / Parkour", de:"Obby / Parkour", ar:"أوبي / باركور", ja:"オビー / パルクール", zh:"跑酷 / 闯关", ko:"오비 / 파쿠르"},
+  tycoon:{en:"Tycoon / Building", he:"טייקון / בנייה", es:"Tycoon / Construcción", fr:"Tycoon / Construction", pt:"Tycoon / Construção", de:"Tycoon / Bauen", ar:"تايكون / بناء", ja:"タイクーン / 建築", zh:"经营 / 建造", ko:"타이쿤 / 건축"},
+  misc:{en:"More Worth Trying", he:"עוד שווה לנסות", es:"Más Vale la Pena Probar", fr:"D'Autres à Essayer", pt:"Mais Vale a Pena Tentar", de:"Weitere Empfehlungen", ar:"ألعاب أخرى تستحق التجربة", ja:"もっと試す価値のあるゲーム", zh:"更多值得尝试", ko:"더 시도해 볼 게임"},
+  puzzle:{en:"Puzzle / Escape", he:"חידות / בריחה", es:"Puzzle / Escape", fr:"Puzzle / Évasion", pt:"Puzzle / Fuga", de:"Rätsel / Escape", ar:"ألغاز / هروب", ja:"パズル / 脱出", zh:"解谜 / 逃脱", ko:"퍼즐 / 탈출"},
+  music:{en:"Music / Rhythm", he:"מוזיקה / ריתמוס", es:"Música / Ritmo", fr:"Musique / Rythme", pt:"Música / Ritmo", de:"Musik / Rhythmus", ar:"موسيقى / إيقاع", ja:"音楽 / リズム", zh:"音乐 / 节奏", ko:"음악 / 리듬"},
+  sandbox:{en:"Building / Sandbox", he:"בנייה / סנדבוקס", es:"Construcción / Sandbox", fr:"Construction / Bac à Sable", pt:"Construção / Sandbox", de:"Bauen / Sandbox", ar:"بناء / عالم مفتوح", ja:"建築 / サンドボックス", zh:"建造 / 沙盒", ko:"건축 / 샌드박스"},
+  community:{en:"Community Picks", he:"בחירות הקהילה", es:"Selecciones de la comunidad", fr:"Sélections de la communauté", pt:"Escolhas da comunidade", de:"Community-Auswahl", ar:"اختيارات المجتمع", ja:"コミュニティのおすすめ", zh:"社区精选", ko:"커뮤니티 추천"},
+};
+let CURRENT_LANG = 'en';
+
+/* ---------- GAME DESCRIPTION TRANSLATIONS ---------- */
+/* Populated progressively, category by category. Falls back to English if a slug/lang isn't here yet. */
+const TRANSLATIONS = {
+  "blade-ball": {
+    he:"קרב חרבות מהיר המבוסס על התחמקות רפלקסיבית. קל ללמידה, קשה לשליטה מלאה — כל סיבוב נגמר תוך שניות.",
+    es:"Combate de espadas rápido basado en esquivar por reflejos. Fácil de aprender, difícil de dominar — cada ronda termina en segundos.",
+    fr:"Combat à l'épée rapide basé sur l'esquive réflexe. Facile à apprendre, difficile à maîtriser — chaque round se termine en quelques secondes.",
+    pt:"Combate de espadas rápido baseado em esquiva por reflexo. Fácil de aprender, difícil de dominar — cada rodada acaba em segundos.",
+    de:"Schnelle Schwertkämpfe, die auf reflexbasiertem Ausweichen beruhen. Leicht zu lernen, schwer zu meistern — jede Runde ist in Sekunden vorbei."
+  },
+  "slap-battles": {
+    he:"סדרת בוסים וכפפות מיוחדות עם אפקטים מטורללים. יותר קומדיה מקרב רציני, וזה בדיוק הקסם שלו.",
+    es:"Una serie de jefes y guantes con efectos ridículos. Más comedia que combate serio, y ese es exactamente su encanto.",
+    fr:"Une série de boss et de gants aux effets ridicules. Plus de comédie que de combat sérieux, et c'est exactement son charme.",
+    pt:"Uma série de chefes e luvas com efeitos ridículos. Mais comédia do que combate sério, e é exatamente esse o seu charme.",
+    de:"Eine Boss- und Handschuh-Serie mit lächerlichen Effekten. Mehr Komödie als ernster Kampf, und genau das macht ihren Charme aus."
+  },
+  "rivals": {
+    he:"יורה טקטי 5 נגד 5 עם תחושת פגיעה מצוינת ומפות קומפקטיות. הכי קרוב שיש ל-CS ברובלוקס.",
+    es:"Un shooter táctico 5v5 con gran respuesta de impacto y mapas compactos. Lo más parecido a CS que hay en Roblox.",
+    fr:"Un jeu de tir tactique en 5v5 avec d'excellentes sensations de tir et des cartes compactes. Ce qui se rapproche le plus de CS sur Roblox.",
+    pt:"Um atirador tático 5x5 com ótima resposta de impacto e mapas compactos. O mais próximo que o Roblox tem de CS.",
+    de:"Ein taktischer 5v5-Shooter mit gutem Trefferfeedback und kompakten Karten. Das Nächste, was Roblox zu CS hat."
+  },
+  "combat-warriors": {
+    he:"לחימה קרובה ואקדחים באותה מערכת קרב, עם התקדמות איטית אך מספקת.",
+    es:"Combate cuerpo a cuerpo y armas en el mismo sistema de combate, con una progresión lenta pero satisfactoria.",
+    fr:"Combat au corps à corps et armes à feu dans le même système, avec une progression lente mais satisfaisante.",
+    pt:"Combate corpo a corpo e armas no mesmo sistema, com uma progressão lenta mas satisfatória.",
+    de:"Nahkampf und Schusswaffen im selben Kampfsystem, mit einem langsamen, aber befriedigenden Fortschritt."
+  },
+  "the-strongest-battlegrounds": {
+    he:"קרבות 1 על 1 בהשראת אנימה עם יכולות ייחודיות לכל דמות. תחרותי וקל ללמידה.",
+    es:"Peleas 1v1 inspiradas en anime con habilidades únicas por personaje. Competitivo y fácil de aprender.",
+    fr:"Combats 1 contre 1 inspirés des animes avec des capacités uniques par personnage. Compétitif et facile à prendre en main.",
+    pt:"Lutas 1x1 inspiradas em anime com habilidades únicas por personagem. Competitivo e fácil de aprender.",
+    de:"Anime-inspirierte 1-gegen-1-Kämpfe mit einzigartigen Fähigkeiten pro Charakter. Kompetitiv und leicht zu erlernen."
+  },
+  "arsenal": {
+    he:"קלאסיקת gun-game מהירה - עוברים דרך רשימת נשק ענקית עם כל הריגה. פשוט, כאוטי, ומהנה בלי סוף.",
+    es:"Un clásico gun-game rápido — recorre un enorme arsenal con cada baja. Simple, caótico e infinitamente rejugable.",
+    fr:"Un classique du gun-game rapide — parcourez un immense arsenal à chaque élimination. Simple, chaotique, et rejouable à l'infini.",
+    pt:"Um clássico gun-game rápido — passe por um enorme arsenal a cada abate. Simples, caótico e infinitamente rejogável.",
+    de:"Ein schneller Gun-Game-Klassiker — bei jedem Kill wechselst du durch ein riesiges Waffenarsenal. Einfach, chaotisch, endlos wiederspielbar."
+  },
+  "phantom-forces": {
+    he:"יורה טקטי רציני יותר עם התאמת נשק אמיתית ודפוסי רתע. למי שרוצה שה-FPS ברובלוקס ירגיש כמו FPS אמיתי.",
+    es:"Un shooter táctico más serio con personalización real de armas y patrones de retroceso. Para quienes quieren que el FPS de Roblox se sienta como uno de verdad.",
+    fr:"Un jeu de tir tactique plus sérieux avec une vraie personnalisation des armes et des schémas de recul. Pour ceux qui veulent que le FPS Roblox ressemble à un vrai FPS.",
+    pt:"Um atirador tático mais sério com personalização real de armas e padrões de recuo. Para quem quer que o FPS do Roblox pareça um FPS de verdade.",
+    de:"Ein ernsthafterer taktischer Shooter mit echter Waffenanpassung und Rückstoßmustern. Für alle, die wollen, dass sich Roblox-FPS wie ein echter FPS anfühlt."
+  },
+  "bad-business": {
+    he:"יורה מבוסס-קבוצות עם מחלקות ומטרות, קרוב יותר ל-Team Fortress מאשר ליורה רפלקסים.",
+    es:"Un shooter por equipos con clases y objetivos, más parecido a Team Fortress que a un shooter de reflejos.",
+    fr:"Un jeu de tir en équipe avec des classes et des objectifs, plus proche de Team Fortress que d'un shooter de réflexes.",
+    pt:"Um atirador em equipe com classes e objetivos, mais parecido com Team Fortress do que com um atirador de reflexos.",
+    de:"Ein teambasierter Shooter mit Klassen und Zielen, näher an Team Fortress als an einem reflexbasierten Shooter."
+  },
+  "notoriety": {
+    he:"משחק שוד וקרבות אש עם אנרגיית שוטרים-נגד-שודדים וקרבות מתוחים באמת.",
+    es:"Un juego de atracos y tiroteos con energía de policías contra ladrones y tiroteos genuinamente tensos.",
+    fr:"Un jeu de braquage et de fusillades avec une énergie flics contre voleurs et des affrontements vraiment tendus.",
+    pt:"Um jogo de assaltos e tiroteios com energia de policiais contra ladrões e tiroteios genuinamente tensos.",
+    de:"Ein Raubüberfall- und Schießerei-Spiel mit Cops-gegen-Räuber-Energie und wirklich angespannten Schusswechseln."
+  },
+  "strucid": {
+    he:"בטל רויאל בסגנון פורטנייט עם מכניקת בנייה. פחות מלוטש, אבל מספק את אותו הצורך.",
+    es:"Un battle royale estilo Fortnite con mecánicas de construcción. Más tosco, pero satisface la misma necesidad.",
+    fr:"Un battle royale façon Fortnite avec des mécaniques de construction. Plus brut, mais gratte la même envie.",
+    pt:"Um battle royale estilo Fortnite com mecânicas de construção. Mais bruto, mas satisfaz a mesma vontade.",
+    de:"Ein Battle Royale im Fortnite-Stil mit Baumechanik. Etwas rauer, aber befriedigt das gleiche Bedürfnis."
+  },
+  "da-hood": {
+    he:"היברידי קרב-יורה בעולם פתוח עם קהילה תחרותית גדולה. טון גס, אך מערכת הקרב מבוססת מיומנות באמת.",
+    es:"Un híbrido de pelea/shooter en mundo abierto con una gran comunidad competitiva. Tono crudo, pero el combate se basa realmente en habilidad.",
+    fr:"Un hybride bagarre/shooter en monde ouvert avec une grande communauté compétitive. Ton brut, mais le combat repose vraiment sur la compétence.",
+    pt:"Um híbrido de luta/tiro em mundo aberto com uma grande comunidade competitiva. Tom bruto, mas o combate é genuinamente baseado em habilidade.",
+    de:"Ein Open-World-Hybrid aus Prügel- und Schießspiel mit großer kompetitiver Community. Rauer Ton, aber der Kampf basiert wirklich auf Skill."
+  },
+  "grand-piece-online": {
+    he:"משחק הרפתקאות פיראטים עם קרבות ימיים אמיתיים ועולם ענק להפליג ולהילחם בו.",
+    es:"Un juego de aventuras piratas con combate naval real y un mundo enorme para navegar y luchar.",
+    fr:"Un jeu d'aventure de pirates avec de vrais combats navals et un monde immense à parcourir en bateau.",
+    pt:"Um jogo de aventura pirata com combate naval real e um mundo enorme para navegar e lutar.",
+    de:"Ein Piraten-Abenteuerspiel mit echten Seeschlachten und einer riesigen Welt zum Segeln und Kämpfen."
+  },
+  "untitled-tag-game": {
+    he:"משחק תפיסה מהיר בסגנון דודג'בול עם קהילה נאמנה - חוקים פשוטים, תקרת מיומנות מפתיעה.",
+    es:"Un juego de pilla-pilla rápido estilo dodgeball con seguidores fieles — reglas simples, techo de habilidad sorprendentemente alto.",
+    fr:"Un jeu de chat rapide façon dodgeball avec une communauté fidèle — règles simples, plafond de compétence étonnamment élevé.",
+    pt:"Um jogo de pega-pega rápido estilo dodgeball com seguidores fiéis — regras simples, teto de habilidade surpreendentemente alto.",
+    de:"Ein schnelles Fangspiel im Völkerball-Stil mit treuer Fangemeinde — einfache Regeln, überraschend hohes Skill-Limit."
+  },
+  "bedwars": {
+    he:"מצב בנייה וקרב שבו מגנים על המיטה שלכם תוך פשיטה על כולם. אסטרטגיה וקרב בחלקים שווים.",
+    es:"Un modo de construir y combatir donde defiendes tu cama mientras asaltas las de los demás. Estrategia y combate a partes iguales.",
+    fr:"Un mode construction et combat où vous défendez votre lit tout en attaquant ceux des autres. Stratégie et combat à parts égales.",
+    pt:"Um modo de construir e lutar onde você defende sua cama enquanto ataca as dos outros. Estratégia e combate em partes iguais.",
+    de:"Ein Bau-und-Kampf-Modus, bei dem du dein Bett verteidigst und gleichzeitig die der anderen angreifst. Strategie und Kampf zu gleichen Teilen."
+  },
+  "bumper-cars": {
+    he:"קרבות השמדה בזירה במכוניות פגוש - נחשו את מהלכי היריבים והדפו אותם החוצה לפני שהם ידפו אתכם.",
+    es:"Eliminatorias de arena de autos chocones — predice los movimientos de tus rivales y empújalos fuera antes de que te empujen a ti.",
+    fr:"Des éliminations en arène avec des autos tamponneuses — anticipez les mouvements adverses et poussez-les dehors avant qu'ils ne le fassent.",
+    pt:"Eliminatórias de arena com carrinhos de choque — preveja os movimentos dos oponentes e empurre-os para fora antes que te empurrem.",
+    de:"Arena-Ausscheidungen mit Boxautos — errate die Züge deiner Gegner und stoße sie hinaus, bevor sie dich hinausstoßen."
+  },
+  "project-power": {
+    he:"משחק על-גיבורים חופשי-לכולם עם טיסה, כוח על, וסביבות הרסניות לגמרי. לכולם אותם כוחות - רק המיומנות מבדילה.",
+    es:"Un brawler de superhéroes todos contra todos con vuelo, superfuerza y entornos totalmente destructibles. Todos tienen los mismos poderes — solo la habilidad marca la diferencia.",
+    fr:"Un brawler de super-héros en chacun pour soi avec vol, super force et environnements entièrement destructibles. Tout le monde a les mêmes pouvoirs — seule la compétence fait la différence.",
+    pt:"Um brawler de super-heróis todos contra todos com voo, superforça e ambientes totalmente destrutíveis. Todos têm os mesmos poderes — só a habilidade separa vocês.",
+    de:"Ein Jeder-gegen-Jeden-Superhelden-Brawler mit Fliegen, Superkraft und voll zerstörbaren Umgebungen. Alle haben dieselben Kräfte — nur Skill macht den Unterschied."
+  },
+  "dueling-grounds": {
+    he:"דו-קרב נשק 1 על 1 מבוסס מיומנות טהורה, בלי כוחות גאצ'ה לנצל - מצבי מזדמן ומדורג, רק אתם מול היריב.",
+    es:"Duelos de armas 1v1 puramente basados en habilidad, sin poderes gacha que abusar — modos casual y clasificatorio, solo tú contra tu rival.",
+    fr:"Des duels d'armes 1 contre 1 purement basés sur la compétence, sans pouvoirs gacha à exploiter — modes détente et classé, juste vous contre votre adversaire.",
+    pt:"Duelos de armas 1x1 puramente baseados em habilidade, sem poderes gacha para abusar — modos casual e ranqueado, só você contra o oponente.",
+    de:"Reine skillbasierte 1-gegen-1-Waffenduelle ohne ausnutzbare Gacha-Kräfte — Casual- und Ranglistenmodus, nur du gegen deinen Gegner."
+  },
+  "bloxstrike": {
+    he:"יורה טקטי תחרותי 5 נגד 5 מבוסס סבבים עם כלכלת קנייה ומערכת סקינים עמוקה - התשובה של רובלוקס ל-Counter-Strike.",
+    es:"Un shooter táctico competitivo 5v5 por rondas con economía de compra y un profundo sistema de skins — la respuesta de Roblox a Counter-Strike.",
+    fr:"Un jeu de tir tactique compétitif 5v5 par rounds avec une économie d'achat et un système de skins riche — la réponse de Roblox à Counter-Strike.",
+    pt:"Um atirador tático competitivo 5x5 por rodadas com economia de compra e um sistema de skins profundo — a resposta do Roblox ao Counter-Strike.",
+    de:"Ein kompetitiver rundenbasierter 5v5-Taktik-Shooter mit Kaufökonomie und tiefem Skin-System — Robloxs Antwort auf Counter-Strike."
+  },
+  "the-eastern-war": {
+    he:"יורה צבאי מתמשך ורלאיסטי עם קרבות רכב ושדות קרב בעולם פתוח בין פלגים משתנים.",
+    es:"Un shooter militar persistente y realista con combate vehicular y campos de batalla de mundo abierto entre facciones cambiantes.",
+    fr:"Un jeu de tir militaire persistant et réaliste avec combats de véhicules et champs de bataille en monde ouvert entre factions changeantes.",
+    pt:"Um atirador militar persistente e realista com combate veicular e campos de batalha em mundo aberto entre facções em mudança.",
+    de:"Ein anhaltender, realistischer Militär-Shooter mit Fahrzeugkämpfen und Open-World-Schlachtfeldern zwischen wechselnden Fraktionen."
+  },
+  "doors": {
+    he:"אימת מסדרונות אטמוספרית - כל דלת היא הימור. עיצוב הסאונד עושה חצי מהעבודה. הכי טוב עם חברים בשיחה קולית.",
+    es:"Terror de pasillo atmosférico — cada puerta es una apuesta. El diseño de sonido hace la mitad del trabajo. Mejor con amigos por voz.",
+    fr:"Horreur de couloir atmosphérique — chaque porte est un pari. Le design sonore fait la moitié du travail. Meilleur avec des amis en vocal.",
+    pt:"Terror de corredor atmosférico — cada porta é uma aposta. O design de som faz metade do trabalho. Melhor com amigos por voz.",
+    de:"Atmosphärischer Flur-Horror — jede Tür ist ein Glücksspiel. Das Sounddesign macht die halbe Arbeit. Am besten mit Freunden im Voice-Chat."
+  },
+  "pressure": {
+    he:"מיוצרי Doors - הישרדות תת-ימית עם מפלצות ומשאבים מוגבלים. מתח מתמיד, לא רק קפיצות פחד.",
+    es:"De los creadores de Doors — supervivencia submarina con monstruos y recursos limitados. Tensión constante, no solo sustos.",
+    fr:"Des créateurs de Doors — survie sous-marine avec des monstres et des ressources limitées. Tension constante, pas seulement des sursauts.",
+    pt:"Dos criadores de Doors — sobrevivência subaquática com monstros e recursos limitados. Tensão constante, não só sustos.",
+    de:"Von den Machern von Doors — Unterwasser-Überleben mit Monstern und begrenzten Ressourcen. Ständige Spannung, nicht nur Jump-Scares."
+  },
+  "forsaken": {
+    he:"הישרדות רב-משתתפים נגד ישות בלתי נראית. חוזר כל שנה כי הנוסחה פשוט עובדת.",
+    es:"Supervivencia multijugador contra una entidad invisible. Vuelve cada año porque la fórmula simplemente funciona.",
+    fr:"Survie multijoueur contre une entité invisible. Revient chaque année car la formule fonctionne tout simplement.",
+    pt:"Sobrevivência multijogador contra uma entidade invisível. Volta todo ano porque a fórmula simplesmente funciona.",
+    de:"Multiplayer-Überleben gegen eine unsichtbare Entität. Kommt jedes Jahr zurück, weil die Formel einfach funktioniert."
+  },
+  "3008": {
+    he:"סופרמרקט אינסופי ומסוכן. בלי הסברים, רק חקירה ופחד.",
+    es:"Un supermercado infinito y peligroso. Sin explicaciones, solo explorar y asustarse.",
+    fr:"Un supermarché infini et dangereux. Pas d'explications, juste explorer et avoir peur.",
+    pt:"Um supermercado infinito e perigoso. Sem explicações, só explorar e se assustar.",
+    de:"Ein endloser, gefährlicher Supermarkt. Keine Erklärungen, nur Erkunden und Gruseln."
+  },
+  "apeirophobia": {
+    he:"זחילת אימה במרחב-סף דרך רמות משתנות ומטרידות. בנוי על אימה ואווירה יותר מקפיצות פחד.",
+    es:"Un recorrido de terror por espacios liminales a través de niveles cambiantes e inquietantes. Construido sobre el pavor y la atmósfera más que los sustos.",
+    fr:"Une exploration horrifique d'espaces liminaux à travers des niveaux changeants et troublants. Basé sur l'angoisse et l'atmosphère plus que les sursauts.",
+    pt:"Uma jornada de terror por espaços liminares através de níveis mutáveis e perturbadores. Construído sobre pavor e atmosfera mais do que sustos.",
+    de:"Ein Liminal-Space-Horror-Trip durch sich verändernde, verstörende Levels. Baut mehr auf Grauen und Atmosphäre als auf Jump-Scares."
+  },
+  "the-mimic": {
+    he:"סיפור אימה מחולק לפרקים בהשראת פולקלור יפני, עם סצנות מצמררות באמת ופתרון חידות.",
+    es:"Una historia de terror por capítulos inspirada en el folclore japonés, con escenarios genuinamente escalofriantes y resolución de acertijos.",
+    fr:"Une histoire d'horreur en chapitres inspirée du folklore japonais, avec des scènes vraiment glaçantes et de la résolution d'énigmes.",
+    pt:"Uma história de terror em capítulos inspirada no folclore japonês, com cenas genuinamente arrepiantes e resolução de quebra-cabeças.",
+    de:"Eine Horrorgeschichte in Kapiteln, inspiriert von japanischer Folklore, mit wirklich gruseligen Szenen und Rätsellösen."
+  },
+  "piggy": {
+    he:"משחק מרדף ובריחה עם עלילה מתמשכת עמוקה במפתיע לאורך עשרות פרקים.",
+    es:"Un juego de persecución y escape con una historia continua sorprendentemente profunda a lo largo de docenas de capítulos.",
+    fr:"Un jeu de poursuite et d'évasion avec une histoire continue étonnamment profonde sur des dizaines de chapitres.",
+    pt:"Um jogo de perseguição e fuga com uma história contínua surpreendentemente profunda ao longo de dezenas de capítulos.",
+    de:"Ein Verfolgungs- und Fluchtspiel mit einer überraschend tiefen fortlaufenden Geschichte über Dutzende Kapitel."
+  },
+  "bear": {
+    he:"משחק הישרדות מחבואים שבו שחקן אחד צד את השאר. חוקים פשוטים, מתח אמיתי.",
+    es:"Un juego de escondite de supervivencia donde un jugador caza al resto. Reglas simples, tensión real.",
+    fr:"Un jeu de cache-cache de survie où un joueur chasse les autres. Règles simples, tension réelle.",
+    pt:"Um jogo de esconde-esconde de sobrevivência onde um jogador caça o resto. Regras simples, tensão real.",
+    de:"Ein Verstecken-Überlebensspiel, bei dem ein Spieler die anderen jagt. Einfache Regeln, echte Spannung."
+  },
+  "camping": {
+    he:"קלאסיקת אימה-הישרדות איטית - אספו ציוד באתר קמפינג בזמן שמשהו עוקב אחריכם בלילה.",
+    es:"Un clásico de terror-supervivencia de combustión lenta — reúne suministros en un campamento mientras algo te acecha de noche.",
+    fr:"Un classique de l'horreur-survie à combustion lente — récupérez des fournitures dans un camping pendant que quelque chose vous traque la nuit.",
+    pt:"Um clássico de terror-sobrevivência de queima lenta — reúna suprimentos em um acampamento enquanto algo te persegue à noite.",
+    de:"Ein langsam brennender Survival-Horror-Klassiker — sammle Vorräte auf einem Campingplatz, während dich nachts etwas verfolgt."
+  },
+  "guest-666": {
+    he:"משחק אימה על מעלית מקוללת בהשראת האגדה הישנה של 'Guest 666'. פחדים קצרים וחדים.",
+    es:"Un juego de terror sobre un ascensor maldito basado en la vieja leyenda de internet 'Guest 666'. Sustos cortos y agudos.",
+    fr:"Un jeu d'horreur sur un ascenseur maudit inspiré de la vieille légende internet 'Guest 666'. Des frayeurs courtes et intenses.",
+    pt:"Um jogo de terror sobre um elevador amaldiçoado baseado na velha lenda da internet 'Guest 666'. Sustos curtos e intensos.",
+    de:"Ein Horrorspiel über einen verfluchten Aufzug, das auf der alten Internet-Legende 'Guest 666' basiert. Kurze, scharfe Schrecken."
+  },
+  "escape-the-backrooms": {
+    he:"זחילה שיתופית דרך תופעת האינטרנט 'Backrooms', עם אלמנטים אמיתיים של חידות והישרדות.",
+    es:"Un recorrido cooperativo por el fenómeno de internet 'Backrooms', con elementos reales de acertijos y supervivencia.",
+    fr:"Une exploration coopérative du phénomène internet des 'Backrooms', avec de vrais éléments d'énigmes et de survie.",
+    pt:"Uma jornada cooperativa pelo fenômeno da internet 'Backrooms', com elementos reais de quebra-cabeça e sobrevivência.",
+    de:"Ein Koop-Trip durch das Internet-Phänomen 'Backrooms', mit echten Rätsel- und Überlebenselementen."
+  },
+  "nicos-nextbots": {
+    he:"נרדפים דרך מפות פתוחות על ידי 'נקסטבוטים' מהירים ובלתי צפויים. אדרנלין טהור, בלי צורך בעלילה.",
+    es:"Te persiguen por mapas abiertos 'nextbots' rápidos e impredecibles. Adrenalina pura, sin necesidad de historia.",
+    fr:"Vous êtes poursuivi à travers des cartes ouvertes par des 'nextbots' rapides et imprévisibles. Adrénaline pure, sans besoin d'histoire.",
+    pt:"Você é perseguido por mapas abertos por 'nextbots' rápidos e imprevisíveis. Adrenalina pura, sem necessidade de história.",
+    de:"Du wirst durch offene Karten von schnellen, unberechenbaren 'Nextbots' gejagt. Pures Adrenalin, keine Story nötig."
+  },
+  "westwood": {
+    he:"עיירה נטושה, יצור לא ידוע משוטט ברחובות, ואתם צריכים לאסוף משאבים ולשרוד עד הזריחה.",
+    es:"Un pueblo abandonado, una criatura desconocida acecha las calles, y necesitas reunir recursos y sobrevivir hasta el amanecer.",
+    fr:"Une ville abandonnée, une créature inconnue rôde dans les rues, et vous devez rassembler des ressources et survivre jusqu'à l'aube.",
+    pt:"Uma cidade abandonada, uma criatura desconhecida ronda as ruas, e você precisa reunir recursos e sobreviver até o amanhecer.",
+    de:"Eine verlassene Stadt, eine unbekannte Kreatur streift durch die Straßen, und du musst Ressourcen sammeln und bis zum Sonnenaufgang überleben."
+  },
+  "slaughter": {
+    he:"משחק אימה-הישרדות מתוח עם מוניטין חזק לאווירה מטרידה באמת.",
+    es:"Un juego de terror-supervivencia tenso con una fuerte reputación de atmósfera genuinamente inquietante.",
+    fr:"Un jeu d'horreur-survie tendu avec une solide réputation d'atmosphère vraiment troublante.",
+    pt:"Um jogo de terror-sobrevivência tenso com forte reputação de atmosfera genuinamente perturbadora.",
+    de:"Ein angespanntes Survival-Horror-Spiel mit einem starken Ruf für wirklich verstörende Atmosphäre."
+  },
+  "prayernoia": {
+    he:"משחק בנושא אימה דתית הידוע כאחת החוויות האינטנסיביות והמטרידות יותר בז'אנר.",
+    es:"Un juego de temática de terror religioso conocido por ser una de las experiencias más intensas y perturbadoras del género.",
+    fr:"Un jeu d'horreur à thème religieux connu pour être l'une des expériences les plus intenses et troublantes du genre.",
+    pt:"Um jogo de temática de terror religioso conhecido por ser uma das experiências mais intensas e perturbadoras do gênero.",
+    de:"Ein Spiel mit religiösem Horror-Thema, bekannt als eine der intensivsten und verstörendsten Erfahrungen im Genre."
+  },
+  "funhouse": {
+    he:"משחק אימה בנושא קרנבל עם גרסה מעוותת ומטרידה של בית שעשועים קלאסי.",
+    es:"Un juego de terror de temática carnavalesca con una versión retorcida e inquietante de la clásica casa de la diversión.",
+    fr:"Un jeu d'horreur sur le thème du carnaval avec une version tordue et troublante de la classique maison hantée.",
+    pt:"Um jogo de terror com temática de carnaval e uma versão retorcida e perturbadora da clássica casa de diversões.",
+    de:"Ein Karneval-Horrorspiel mit einer verdrehten, verstörenden Version des klassischen Spukhauses."
+  },
+  "the-butchery": {
+    he:"משחק אימה מכוער וכבד-אווירה שבנוי סביב פחד יותר מקפיצות.",
+    es:"Un juego de terror grotesco y de mucha atmósfera construido en torno al pavor más que a los sustos.",
+    fr:"Un jeu d'horreur grotesque et lourd en atmosphère, construit autour de l'angoisse plus que des sursauts.",
+    pt:"Um jogo de terror grotesco e de atmosfera pesada, construído em torno do pavor mais do que sustos.",
+    de:"Ein groteskes, atmosphärelastiges Horrorspiel, das mehr auf Grauen als auf Jump-Scares setzt."
+  },
+  "the-hour-of-creation": {
+    he:"חוויית אימה/הרפתקה בגוון נוסטלגי עם קהילת מעריצים חזקה.",
+    es:"Una experiencia de terror/aventura con un toque nostálgico y una fuerte base de seguidores.",
+    fr:"Une expérience horreur/aventure teintée de nostalgie avec une solide communauté de fans.",
+    pt:"Uma experiência de terror/aventura com toque nostálgico e uma forte base de fãs.",
+    de:"Ein nostalgisch angehauchtes Horror-/Abenteuererlebnis mit einer starken Fangemeinde."
+  },
+  "wonderland": {
+    he:"חוויית אימה/הרפתקה בסגנון אנימה עם זהות ויזואלית ייחודית.",
+    es:"Una experiencia de terror/aventura de estilo anime con una identidad visual distintiva.",
+    fr:"Une expérience horreur/aventure de style anime avec une identité visuelle distincte.",
+    pt:"Uma experiência de terror/aventura de estilo anime com identidade visual distinta.",
+    de:"Ein Anime-artiges Horror-/Abenteuererlebnis mit unverwechselbarer visueller Identität."
+  },
+  "the-rake": {
+    he:"ציד יצור אימה קלאסי ברובלוקס - מפלצת מהירה ושקטה משוטטת במפה בלילה.",
+    es:"Una cacería de criatura de terror clásica de Roblox — un monstruo rápido y silencioso acecha el mapa de noche.",
+    fr:"Une chasse à la créature horrifique classique de Roblox — un monstre rapide et silencieux rôde sur la carte la nuit.",
+    pt:"Uma caçada de criatura de terror clássica do Roblox — um monstro rápido e silencioso ronda o mapa à noite.",
+    de:"Eine klassische Roblox-Horror-Kreaturenjagd — ein schnelles, stilles Monster streift nachts über die Karte."
+  },
+  "buried-alive": {
+    he:"משחק אימה-הישרדות על בריחה ממלכודת מתחת לאדמה - קלאוסטרופובי ומתוח בכוונה.",
+    es:"Un juego de terror-supervivencia sobre escapar de estar atrapado bajo tierra — claustrofóbico y tenso por diseño.",
+    fr:"Un jeu d'horreur-survie sur l'évasion d'un piège souterrain — claustrophobe et tendu par conception.",
+    pt:"Um jogo de terror-sobrevivência sobre escapar de ficar preso debaixo da terra — claustrofóbico e tenso por design.",
+    de:"Ein Survival-Horror-Spiel über die Flucht aus einer unterirdischen Falle — bewusst klaustrophobisch und angespannt."
+  },
+  "king-legacy": {
+    he:"עולם פתוח בהשראת פיראטים, עם כוחות 'פרי' ייחודיים ובוסים מרשימים. התקדמות ארוכה שמרגישה שווה.",
+    es:"Un mundo abierto inspirado en piratas, con poderes de 'fruta' únicos y jefes impresionantes. Una progresión larga que vale la pena.",
+    fr:"Un monde ouvert inspiré des pirates, avec des pouvoirs de 'fruits' uniques et des boss impressionnants. Une progression longue qui en vaut la peine.",
+    pt:"Um mundo aberto inspirado em piratas, com poderes de 'fruta' únicos e chefes impressionantes. Uma progressão longa que vale a pena.",
+    de:"Eine von Piraten inspirierte offene Welt mit einzigartigen 'Frucht'-Kräften und beeindruckenden Bossen. Ein langer Fortschritt, der sich lohnt."
+  },
+  "deepwoken": {
+    he:"Souls-like אמיתי ברובלוקס - קשוח, בלתי סלחני, ומספק כשמצליחים. לא לסשן רגוע.",
+    es:"Un auténtico Souls-like en Roblox — duro, implacable y satisfactorio cuando lo logras. No para una sesión relajada.",
+    fr:"Un véritable Souls-like sur Roblox — dur, impitoyable, et satisfaisant quand on y arrive. Pas pour une session détendue.",
+    pt:"Um verdadeiro Souls-like no Roblox — duro, implacável e satisfatório quando você consegue. Não é para uma sessão relaxada.",
+    de:"Ein echtes Souls-like auf Roblox — hart, gnadenlos und befriedigend, wenn man durchkommt. Nichts für eine entspannte Session."
+  },
+  "fisch": {
+    he:"דיג עם יותר עומק ממה שהייתם מצפים - כלכלה, ציוד, מפות נסתרות. מרגיע וממכר בו זמנית.",
+    es:"Pesca con más profundidad de la que esperarías — economía, equipo, mapas ocultos. Relajante y adictivo a la vez.",
+    fr:"Pêche avec plus de profondeur que prévu — économie, équipement, cartes cachées. Relaxant et addictif à la fois.",
+    pt:"Pesca com mais profundidade do que você esperaria — economia, equipamento, mapas ocultos. Relaxante e viciante ao mesmo tempo.",
+    de:"Angeln mit mehr Tiefe als erwartet — Wirtschaft, Ausrüstung, versteckte Karten. Entspannend und süchtig machend zugleich."
+  },
+  "blox-fruits": {
+    he:"הענק של הז'אנר - עולם פתוח עצום עם מאות שעות תוכן. לא הכי מלוטש, אבל אינסופי.",
+    es:"El gigante del género — un mundo abierto masivo con cientos de horas de contenido. No el más pulido, pero interminable.",
+    fr:"Le géant du genre — un monde ouvert massif avec des centaines d'heures de contenu. Pas le plus poli, mais sans fin.",
+    pt:"O gigante do gênero — um mundo aberto massivo com centenas de horas de conteúdo. Não o mais polido, mas interminável.",
+    de:"Der Gigant des Genres — eine riesige offene Welt mit Hunderten Stunden Inhalt. Nicht am poliertesten, aber endlos."
+  },
+  "arcane-odyssey": {
+    he:"עולם פתוח מונחה-עלילה מהמפתח שמאחורי Adventure Story - כתיבה אמיתית, חקירה אמיתית, סיכונים אמיתיים.",
+    es:"Un mundo abierto guiado por historia del desarrollador detrás de Adventure Story — escritura real, exploración real, riesgos reales.",
+    fr:"Un monde ouvert axé sur l'histoire du développeur derrière Adventure Story — une vraie écriture, une vraie exploration, de vrais enjeux.",
+    pt:"Um mundo aberto guiado por história do desenvolvedor por trás de Adventure Story — escrita real, exploração real, riscos reais.",
+    de:"Eine story-getriebene offene Welt vom Entwickler hinter Adventure Story — echtes Writing, echte Erkundung, echter Einsatz."
+  },
+  "adventure-story": {
+    he:"הרפתקת יחיד קלאסית-פולחן עם שאיפה נרטיבית אמיתית, נדירה בפלטפורמה.",
+    es:"Una aventura para un jugador de culto clásico con ambición narrativa genuina, algo raro en la plataforma.",
+    fr:"Une aventure solo culte avec une véritable ambition narrative, rare sur la plateforme.",
+    pt:"Uma aventura clássica cult para um jogador com ambição narrativa genuína, rara na plataforma.",
+    de:"Ein Kult-Solo-Abenteuer mit echtem erzählerischem Anspruch, selten auf der Plattform."
+  },
+  "project-slayers": {
+    he:"RPG לחימת שדים בהשראת אנימה עם סגנונות נשימה ומכניקת קלאנים שמתגמלת אימון אמיתי.",
+    es:"Un RPG de lucha contra demonios inspirado en anime con estilos de respiración y mecánicas de clanes que recompensan la práctica real.",
+    fr:"Un RPG de combat de démons inspiré des animes avec des styles de respiration et des mécaniques de clan qui récompensent la vraie pratique.",
+    pt:"Um RPG de luta contra demônios inspirado em anime com estilos de respiração e mecânicas de clã que recompensam a prática real.",
+    de:"Ein Anime-inspiriertes Dämonenkampf-RPG mit Atemstilen und Clan-Mechaniken, die echtes Üben belohnen."
+  },
+  "shindo-life": {
+    he:"RPG עולם-נינג'ות עם רשימת מהלכים ענקית ומערכת כפרים. אחד ה-RPG-ים בהשראת אנימה הוותיקים ביותר בפלטפורמה.",
+    es:"Un RPG de mundo ninja con una lista de movimientos masiva y sistema de aldeas. Uno de los RPG de anime más longevos de la plataforma.",
+    fr:"Un RPG de monde ninja avec une liste de mouvements massive et un système de villages. L'un des RPG anime les plus anciens de la plateforme.",
+    pt:"Um RPG de mundo ninja com uma lista de movimentos massiva e sistema de vilas. Um dos RPGs de anime mais duradouros da plataforma.",
+    de:"Ein Ninja-Welt-RPG mit riesiger Move-Liste und Dorfsystem. Eines der am längsten laufenden Anime-RPGs auf der Plattform."
+  },
+  "world-zero": {
+    he:"RPG מבוסס-מחלקות עם תוכן דנג'ונים ורייד אמיתי - קרוב יותר ל-MMO מיני מאשר רוב משחקי רובלוקס.",
+    es:"Un RPG basado en clases con contenido real de mazmorras y raids — más cerca de un mini MMO que la mayoría de los juegos de Roblox.",
+    fr:"Un RPG basé sur des classes avec du vrai contenu de donjons et de raids — plus proche d'un mini MMO que la plupart des jeux Roblox.",
+    pt:"Um RPG baseado em classes com conteúdo real de masmorras e raides — mais perto de um mini MMO do que a maioria dos jogos do Roblox.",
+    de:"Ein klassenbasiertes RPG mit echtem Dungeon- und Raid-Content — näher an einem Mini-MMO als die meisten Roblox-Spiele."
+  },
+  "peroxide": {
+    he:"RPG בהשראת Bleach עם מכניקת שינגמי והולואו, בנוי לשחקנים שרוצים מערכות קרב עמוקות.",
+    es:"Un RPG inspirado en Bleach con mecánicas de shinigami y hollow, hecho para jugadores que quieren sistemas de combate profundos.",
+    fr:"Un RPG inspiré de Bleach avec des mécaniques de shinigami et de hollow, conçu pour les joueurs qui veulent des systèmes de combat profonds.",
+    pt:"Um RPG inspirado em Bleach com mecânicas de shinigami e hollow, feito para jogadores que querem sistemas de combate profundos.",
+    de:"Ein Bleach-inspiriertes RPG mit Shinigami- und Hollow-Mechaniken, gemacht für Spieler, die tiefe Kampfsysteme wollen."
+  },
+  "type-soul": {
+    he:"עוד RPG בהשראת Bleach, ממוקד בהתקדמות מונחית-PvP ובניית כוח מבוססת קלאנים.",
+    es:"Otro RPG inspirado en Bleach, centrado en la progresión orientada al PvP y en builds de poder basados en clanes.",
+    fr:"Un autre RPG inspiré de Bleach, axé sur une progression orientée PvP et des builds de puissance basés sur les clans.",
+    pt:"Outro RPG inspirado em Bleach, focado em progressão orientada a PvP e builds de poder baseados em clãs.",
+    de:"Ein weiteres Bleach-inspiriertes RPG mit Fokus auf PvP-getriebenem Fortschritt und clan-basierten Power-Builds."
+  },
+  "elemental-battlegrounds": {
+    he:"בחרו יסוד, למדו את מהלכיו, והילחמו במפות משתנות. קונספט פשוט, תקרת מיומנות גבוהה.",
+    es:"Elige un elemento, aprende su set de movimientos y lucha en mapas cambiantes. Concepto simple, techo de habilidad alto.",
+    fr:"Choisissez un élément, apprenez son moveset, et combattez sur des cartes changeantes. Concept simple, plafond de compétence élevé.",
+    pt:"Escolha um elemento, aprenda seu moveset e lute em mapas em mudança. Conceito simples, teto de habilidade alto.",
+    de:"Wähle ein Element, lerne sein Moveset und kämpfe auf wechselnden Karten. Einfaches Konzept, hohes Skill-Limit."
+  },
+  "ninja-legends": {
+    he:"היברידי סימולטור-RPG של אימוני נינג'ה עם חיות מחמד, עולמות, וגריינד ארוך-טווח מספק.",
+    es:"Un híbrido simulador-RPG de entrenamiento ninja con mascotas, mundos y una progresión a largo plazo satisfactoria.",
+    fr:"Un hybride simulateur-RPG d'entraînement ninja avec des animaux de compagnie, des mondes et une progression à long terme satisfaisante.",
+    pt:"Um híbrido simulador-RPG de treinamento ninja com pets, mundos e uma progressão de longo prazo satisfatória.",
+    de:"Ein Ninja-Trainings-Simulator-RPG-Hybrid mit Haustieren, Welten und befriedigendem Langzeit-Grind."
+  },
+  "dungeon-quest": {
+    he:"זחילת מבוכים עם מערכות שלל אמיתיות וקרבות בוסים - אחד המשחקים המוקדמים שעשה התקדמות RPG טוב.",
+    es:"Un dungeon-crawler con sistemas de botín reales y peleas de jefes — uno de los primeros juegos en hacer bien la progresión RPG.",
+    fr:"Un dungeon-crawler avec de vrais systèmes de butin et des combats de boss — l'un des premiers jeux à bien réussir la progression RPG.",
+    pt:"Um dungeon-crawler com sistemas reais de saque e lutas contra chefes — um dos primeiros jogos a fazer bem a progressão RPG.",
+    de:"Ein Dungeon-Crawler mit echten Loot-Systemen und Bosskämpfen — eines der früheren Spiele, die RPG-Fortschritt gut umgesetzt haben."
+  },
+  "ro-ghoul": {
+    he:"RPG בהשראת Tokyo Ghoul על איזון בין כוחות אדם וגול, עם סיכוני PvP אמיתיים.",
+    es:"Un RPG inspirado en Tokyo Ghoul sobre equilibrar poderes humanos y ghoul, con verdaderos riesgos de PvP.",
+    fr:"Un RPG inspiré de Tokyo Ghoul sur l'équilibre entre pouvoirs humains et goules, avec de vrais enjeux PvP.",
+    pt:"Um RPG inspirado em Tokyo Ghoul sobre equilibrar poderes humanos e ghoul, com riscos reais de PvP.",
+    de:"Ein Tokyo-Ghoul-inspiriertes RPG über das Balancieren von Menschen- und Ghoul-Kräften, mit echtem PvP-Risiko."
+  },
+  "tower-defense-simulator": {
+    he:"טאוור דיפנס קלאסי עם שיתוף פעולה, שדרוגי מגדלים עמוקים ואירועים עונתיים. נוסחה שהחזיקה מעמד שנים.",
+    es:"Tower defense clásico con cooperativo, mejoras profundas de torres y eventos de temporada. Una fórmula que ha resistido años.",
+    fr:"Un tower defense classique avec coopération, améliorations de tours poussées et événements saisonniers. Une formule qui tient depuis des années.",
+    pt:"Tower defense clássico com cooperativo, upgrades profundos de torres e eventos sazonais. Uma fórmula que se mantém há anos.",
+    de:"Klassisches Tower Defense mit Koop, tiefgehenden Turm-Upgrades und saisonalen Events. Eine Formel, die sich seit Jahren bewährt."
+  },
+  "anime-adventures": {
+    he:"טאוור דיפנס עם דמויות אנימה בתור ה'יחידות' שלכם. חלק אספנות, חלק אסטרטגיה, מתעדכן כל הזמן.",
+    es:"Tower defense con personajes de anime como tus 'unidades'. Parte coleccionable, parte estrategia, actualizado constantemente.",
+    fr:"Un tower defense avec des personnages d'anime comme 'unités'. Mi-collection, mi-stratégie, constamment mis à jour.",
+    pt:"Tower defense com personagens de anime como suas 'unidades'. Parte colecionável, parte estratégia, atualizado constantemente.",
+    de:"Tower Defense mit Anime-Charakteren als 'Einheiten'. Teils Sammeln, teils Strategie, ständig aktualisiert."
+  },
+  "tower-heroes": {
+    he:"שילוב של TD ו-MOBA - לא רק שמים מגדלים, גם שולטים באופן פעיל בגיבור. יותר לא-מוערך ממה שמגיע לו.",
+    es:"Una mezcla de TD y MOBA — no solo colocas torres, también controlas activamente a un héroe. Más infravalorado de lo que merece.",
+    fr:"Un mélange de TD et de MOBA — vous ne faites pas que placer des tours, vous contrôlez aussi activement un héros. Plus sous-estimé qu'il ne le mérite.",
+    pt:"Uma mistura de TD e MOBA — você não só coloca torres, também controla ativamente um herói. Mais subestimado do que merece.",
+    de:"Eine Mischung aus TD und MOBA — du platzierst nicht nur Türme, sondern steuerst auch aktiv einen Helden. Unterschätzter, als es verdient."
+  },
+  "all-star-tower-defense": {
+    he:"מבחר ענק של יחידות קרוסאובר אנימה עם עומק אסטרטגי אמיתי בבניית צוותים.",
+    es:"Una enorme plantilla de unidades crossover de anime con verdadera profundidad estratégica en la formación de equipos.",
+    fr:"Un immense éventail d'unités crossover animées avec une réelle profondeur stratégique dans la composition d'équipe.",
+    pt:"Um enorme elenco de unidades crossover de anime com verdadeira profundidade estratégica na formação de times.",
+    de:"Ein riesiges Aufgebot an Anime-Crossover-Einheiten mit echter strategischer Tiefe beim Team-Aufbau."
+  },
+  "recoil": {
+    he:"סימולטור מפקד שבו בונים צבאות רובוטיים ומתכננים אסטרטגיות אמיתיות. עומק נדיר לפלטפורמה.",
+    es:"Un simulador de comandante donde construyes ejércitos robóticos y planeas estrategias reales. Una profundidad rara para la plataforma.",
+    fr:"Un simulateur de commandant où vous construisez des armées robotiques et planifiez de vraies stratégies. Une profondeur rare pour la plateforme.",
+    pt:"Um simulador de comandante onde você constrói exércitos robóticos e planeja estratégias reais. Uma profundidade rara para a plataforma.",
+    de:"Ein Kommandanten-Simulator, in dem du Roboterarmeen aufbaust und echte Strategien planst. Seltene Tiefe für die Plattform."
+  },
+  "tower-battles": {
+    he:"משחק טאוור דיפנס פשוט ומוצק מבחינה מכנית שנשאר מועדף הקהילה שנים.",
+    es:"Un juego de tower defense sin adornos y mecánicamente sólido que sigue siendo favorito de la comunidad durante años.",
+    fr:"Un tower defense sans fioritures et mécaniquement solide, resté un favori de la communauté pendant des années.",
+    pt:"Um jogo de tower defense sem frescuras e mecanicamente sólido que continua favorito da comunidade há anos.",
+    de:"Ein schnörkelloses, mechanisch solides Tower-Defense-Spiel, das seit Jahren ein Community-Liebling bleibt."
+  },
+  "miners-haven": {
+    he:"בנאי בסיס אסטרטגיה-סרק על אופטימיזציה של מסועים ומכונות לרווח. מערכות עמוקות למי שאוהב לדייק.",
+    es:"Un constructor de base de estrategia inactiva sobre optimizar cintas transportadoras y máquinas para obtener ganancias. Sistemas profundos para los min-maxers.",
+    fr:"Un constructeur de base de stratégie inactive sur l'optimisation de tapis roulants et de machines pour le profit. Des systèmes profonds pour les min-maxers.",
+    pt:"Um construtor de base de estratégia idle sobre otimizar esteiras e máquinas para lucro. Sistemas profundos para quem gosta de otimizar tudo.",
+    de:"Ein Idle-Strategie-Basenbauer rund um die Optimierung von Förderbändern und Maschinen für Profit. Tiefe Systeme für Min-Maxer."
+  },
+  "anime-last-stand": {
+    he:"משחק טאוור דיפנס עם יחידות בהשראת אנימה ולולאת שדרוגים מהירה ששומרת על ריצות קצרות וחוזרות.",
+    es:"Un juego de tower defense con unidades inspiradas en anime y un ciclo de mejoras rápido que mantiene las partidas cortas y rejugables.",
+    fr:"Un jeu de tower defense avec des unités inspirées d'anime et une boucle de mise à niveau rapide qui garde les parties courtes et rejouables.",
+    pt:"Um jogo de tower defense com unidades inspiradas em anime e um loop de upgrade rápido que mantém as partidas curtas e rejogáveis.",
+    de:"Ein Tower-Defense-Spiel mit Anime-inspirierten Einheiten und einem schnellen Upgrade-Loop, der Runden kurz und wiederspielbar hält."
+  },
+  "world-at-war": {
+    he:"משחק אסטרטגיית כיבוש מדינות - בנו צבאות, כרתו בריתות, הכריזו מלחמות, ונסו לבנות את האימפריה החזקה במפה.",
+    es:"Un juego de estrategia de conquista de países — construye ejércitos, forma alianzas, declara guerras y trata de construir el imperio más fuerte del mapa.",
+    fr:"Un jeu de stratégie de conquête de pays — construisez des armées, formez des alliances, déclarez la guerre et essayez de bâtir le plus puissant empire de la carte.",
+    pt:"Um jogo de estratégia de conquista de países — construa exércitos, forme alianças, declare guerras e tente construir o império mais forte do mapa.",
+    de:"Ein Länder-Eroberungs-Strategiespiel — baue Armeen auf, schließe Allianzen, erkläre Kriege und versuche, das stärkste Imperium auf der Karte aufzubauen."
+  },
+  "protect-the-border": {
+    he:"משחק הגנת-מחסום שיתופי - בדקו תעודות זהות, חפשו ברכבים, ושרדו גלי לילה מסלימים כיחידת סיור גבולות.",
+    es:"Un juego cooperativo de defensa de puesto de control — revisa identificaciones, registra vehículos y sobrevive a oleadas nocturnas crecientes como escuadrón de patrulla fronteriza.",
+    fr:"Un jeu coopératif de défense de poste de contrôle — vérifiez les papiers, fouillez les véhicules, et survivez à des vagues nocturnes croissantes en tant qu'équipe de patrouille frontalière.",
+    pt:"Um jogo cooperativo de defesa de posto de controle — verifique documentos, revise veículos e sobreviva a ondas noturnas crescentes como esquadrão de patrulha de fronteira.",
+    de:"Ein Koop-Checkpoint-Verteidigungsspiel — prüfe Ausweise, durchsuche Fahrzeuge und überlebe eskalierende Nachtwellen als Grenzpatrouille."
+  },
+  "welcome-to-bloxburg": {
+    he:"סימולטור חיים ומשחק בניית בתים עם עומק מפתיע. הכי קרוב שרובלוקס מגיע ל-The Sims.",
+    es:"Un simulador de vida y juego de construcción de casas con una profundidad sorprendente. Lo más cercano que Roblox llega a The Sims.",
+    fr:"Un simulateur de vie et jeu de construction de maisons avec une profondeur surprenante. Ce que Roblox a de plus proche des Sims.",
+    pt:"Um simulador de vida e jogo de construção de casas com profundidade surpreendente. O mais próximo que o Roblox chega de The Sims.",
+    de:"Ein Lebenssimulator und Hausbauspiel mit überraschender Tiefe. Das Nächste, was Roblox zu Die Sims hat."
+  },
+  "jailbreak": {
+    he:"שוטרים נגד שודדים בעיר פתוחה - שוד, מרדפים, בריחות מכלא. ותיק שעדיין כיפי ועדיין מתעדכן.",
+    es:"Policías contra ladrones en una ciudad abierta — atracos, persecuciones, fugas de prisión. Un veterano que sigue siendo divertido y actualizado.",
+    fr:"Flics contre voleurs dans une ville ouverte — braquages, poursuites, évasions de prison. Un vétéran toujours amusant et mis à jour.",
+    pt:"Policiais contra ladrões em uma cidade aberta — assaltos, perseguições, fugas de prisão. Um veterano que continua divertido e atualizado.",
+    de:"Cops gegen Räuber in einer offenen Stadt — Raubüberfälle, Verfolgungsjagden, Gefängnisausbrüche. Ein Oldie, der immer noch Spaß macht und aktualisiert wird."
+  },
+  "islands": {
+    he:"בניית ופיתוח אי עם מכניקה שמזכירה מיינקראפט, אבל עם הקצב והכלכלה של רובלוקס.",
+    es:"Construcción y desarrollo de islas con mecánicas que recuerdan a Minecraft, pero con el ritmo y la economía de Roblox.",
+    fr:"Construction et développement d'île avec des mécaniques rappelant Minecraft, mais avec le rythme et l'économie de Roblox.",
+    pt:"Construção e desenvolvimento de ilha com mecânicas que lembram Minecraft, mas com o ritmo e a economia do Roblox.",
+    de:"Insel-Bau und -Entwicklung mit Mechaniken, die an Minecraft erinnern, aber mit dem Tempo und der Wirtschaft von Roblox."
+  },
+  "emergency-response-liberty-county": {
+    he:"רול-פליי משטרה/כבאות/רפואה בעיר חיה. למי שאוהב לקחת רול-פליי ברצינות.",
+    es:"Roleplay de policía/bomberos/médicos en una ciudad viva. Para quienes les gusta tomarse en serio el roleplay.",
+    fr:"Roleplay police/pompiers/médical dans une ville vivante. Pour ceux qui aiment prendre le roleplay au sérieux.",
+    pt:"Roleplay de polícia/bombeiros/médico em uma cidade viva. Para quem gosta de levar o roleplay a sério.",
+    de:"Polizei-/Feuerwehr-/Sanitäter-Rollenspiel in einer lebendigen Stadt. Für alle, die Rollenspiel ernst nehmen wollen."
+  },
+  "brookhaven-rp": {
+    he:"עיירת רול-פליי חופשית - בלי מטרה קבועה, רק בתים, מכוניות, וכל סיפור שתמציאו.",
+    es:"Un pueblo de roleplay de libre exploración — sin objetivo fijo, solo casas, autos, y la historia que inventes.",
+    fr:"Une ville de roleplay en liberté — pas d'objectif fixe, juste des maisons, des voitures, et l'histoire que vous inventez.",
+    pt:"Uma cidade de roleplay livre — sem objetivo fixo, só casas, carros, e a história que você inventar.",
+    de:"Eine Free-Roam-Rollenspielstadt — kein festes Ziel, nur Häuser, Autos und die Geschichte, die du dir ausdenkst."
+  },
+  "adopt-me": {
+    he:"משחק אספנות ומסחר חיות מחמד עם כלכלה ענקית ופעילה באמת. שנוי במחלוקת, אך בנוי היטב כמרחב חברתי.",
+    es:"Un juego de coleccionar y comerciar mascotas con una economía genuinamente enorme y activa. Divisivo, pero innegablemente bien construido como espacio social.",
+    fr:"Un jeu de collection et d'échange d'animaux avec une économie véritablement énorme et active. Clivant, mais indéniablement bien conçu comme espace social.",
+    pt:"Um jogo de colecionar e trocar pets com uma economia genuinamente enorme e ativa. Controverso, mas inegavelmente bem construído como espaço social.",
+    de:"Ein Haustier-Sammel- und Handelsspiel mit einer wirklich riesigen, aktiven Wirtschaft. Umstritten, aber unbestreitbar gut gebaut als sozialer Raum."
+  },
+  "royale-high": {
+    he:"משחק רול-פליי אופנה וחיי קמפוס עם זהות אסתטית חזקה וקהילה מסורה.",
+    es:"Un juego de roleplay de moda y vida universitaria con una fuerte identidad estética y una comunidad dedicada.",
+    fr:"Un jeu de roleplay mode et vie de campus avec une forte identité esthétique et une communauté dévouée.",
+    pt:"Um jogo de roleplay de moda e vida de campus com forte identidade estética e comunidade dedicada.",
+    de:"Ein Mode- und Campusleben-Rollenspiel mit starker ästhetischer Identität und engagierter Community."
+  },
+  "prison-life": {
+    he:"אחד המקוריים - שוטרים, אסירים, ולולאת בריחה מכלא שחצי מהפלטפורמה העתיקה מאז.",
+    es:"Uno de los originales — policías, presos, y un ciclo de fuga de prisión que la mitad de la plataforma ha copiado desde entonces.",
+    fr:"L'un des originaux — flics, détenus, et une boucle d'évasion de prison que la moitié de la plateforme a copiée depuis.",
+    pt:"Um dos originais — policiais, presos, e um loop de fuga de prisão que metade da plataforma copiou desde então.",
+    de:"Einer der Originale — Cops, Insassen und ein Gefängnisausbruch-Loop, den seitdem die halbe Plattform kopiert hat."
+  },
+  "livetopia": {
+    he:"משחק רול-פליי עירוני עם מפה פתוחה גדולה ועדכוני תוכן עונתיים מתמידים.",
+    es:"Un juego de roleplay de ciudad con un gran mapa abierto y actualizaciones constantes de contenido de temporada.",
+    fr:"Un jeu de roleplay urbain avec une grande carte ouverte et des mises à jour saisonnières constantes.",
+    pt:"Um jogo de roleplay urbano com um grande mapa aberto e atualizações constantes de conteúdo sazonal.",
+    de:"Ein Stadt-Rollenspiel mit großer offener Karte und ständigen saisonalen Content-Updates."
+  },
+  "berry-avenue-rp": {
+    he:"משחק רול-פליי בית-ועיירה מפורט עם איכות בנייה גבוהה וקהילה פעילה.",
+    es:"Un juego de roleplay de casa y pueblo detallado con gran calidad de construcción y una comunidad activa.",
+    fr:"Un jeu de roleplay maison-et-ville détaillé avec une grande qualité de construction et une communauté active.",
+    pt:"Um jogo de roleplay de casa e cidade detalhado com alta qualidade de construção e comunidade ativa.",
+    de:"Ein detailliertes Haus-und-Stadt-Rollenspiel mit hoher Baugüte und aktiver Community."
+  },
+  "southwest-florida": {
+    he:"משחק נהיגה ורול-פליי סביב מכוניות ריאליסטיות ומפה פתוחה רגועה.",
+    es:"Un juego de conducción y roleplay centrado en autos realistas y un mapa abierto relajado.",
+    fr:"Un jeu de conduite et roleplay centré sur des voitures réalistes et une carte ouverte détendue.",
+    pt:"Um jogo de direção e roleplay centrado em carros realistas e um mapa aberto relaxado.",
+    de:"Ein Fahr- und Rollenspiel rund um realistische Autos und eine entspannte offene Karte."
+  },
+  "greenville": {
+    he:"משחק רול-פליי ממוקד-מכוניות עם דגמי רכב מפורטים באמת ומפת עיירה קטנה ורגועה.",
+    es:"Un juego de roleplay centrado en autos con modelos de vehículos genuinamente detallados y un mapa de pueblo relajado.",
+    fr:"Un jeu de roleplay centré sur les voitures avec des modèles de véhicules vraiment détaillés et une carte de petite ville détendue.",
+    pt:"Um jogo de roleplay focado em carros com modelos de veículos genuinamente detalhados e um mapa de cidade pequena relaxado.",
+    de:"Ein autofokussiertes Rollenspiel mit wirklich detaillierten Fahrzeugmodellen und einer entspannten Kleinstadtkarte."
+  },
+  "robloxian-high-school": {
+    he:"משחק רול-פליי חיי בית ספר עם שיעורים, פעילויות, ומפת קמפוס גדולה ומפורטת באמת.",
+    es:"Un juego de roleplay de vida escolar con clases, actividades, y un mapa de campus genuinamente grande y detallado.",
+    fr:"Un jeu de roleplay de vie scolaire avec des cours, des activités, et une carte de campus vraiment grande et détaillée.",
+    pt:"Um jogo de roleplay de vida escolar com aulas, atividades, e um mapa de campus genuinamente grande e detalhado.",
+    de:"Ein Schulleben-Rollenspiel mit Unterricht, Aktivitäten und einer wirklich großen, detaillierten Campus-Karte."
+  },
+  "pls-donate": {
+    he:"משחק חברתי מינימליסטי הבנוי כולו סביב מסחר, תרומות, והצגת קוסמטיקה. קונספט פשוט, קהילה ענקית.",
+    es:"Un juego de reunión minimalista construido enteramente en torno al comercio, las donaciones y presumir cosméticos. Concepto simple, comunidad enorme.",
+    fr:"Un jeu social minimaliste entièrement construit autour de l'échange, des dons et de l'exhibition de cosmétiques. Concept simple, immense communauté.",
+    pt:"Um jogo social minimalista construído inteiramente em torno de comércio, doações e exibir cosméticos. Conceito simples, comunidade enorme.",
+    de:"Ein minimalistisches Hangout-Spiel, das komplett um Handel, Spenden und Kosmetik-Zurschaustellung aufgebaut ist. Einfaches Konzept, riesige Community."
+  },
+  "twilight-daycare": {
+    he:"משחק רול-פליי ותיק שבו משחקים תינוק או מטפל/ת, מצטרפים למשפחה, ומעצבים את החלל שלכם. קהילה ענקית ומסורה.",
+    es:"Un juego de roleplay de larga trayectoria donde interpretas a un bebé o cuidador, te unes a una familia y decoras tu propio espacio. Comunidad enorme y dedicada.",
+    fr:"Un jeu de roleplay de longue date où vous incarnez un bébé ou un tuteur, rejoignez une famille et décorez votre propre espace. Communauté immense et dévouée.",
+    pt:"Um jogo de roleplay de longa data onde você interpreta um bebê ou cuidador, entra para uma família e decora seu próprio espaço. Comunidade enorme e dedicada.",
+    de:"Ein langjähriges Rollenspiel, in dem du ein Baby oder eine Betreuungsperson spielst, einer Familie beitrittst und deinen eigenen Raum dekorierst. Riesige, engagierte Community."
+  },
+  "pets-vs-police": {
+    he:"משחק בריחה מכלא שבו חיות מחמד פורצות מהכלא, שודדות חנויות, ומתחמקות מהמשטרה - אנרגיית שוטרים-שודדים כאוטית עם טוויסט של בעלי חיים.",
+    es:"Un juego de fuga de prisión donde mascotas escapan de la cárcel, roban tiendas y esquivan a la policía — energía caótica de policías y ladrones con un giro animal.",
+    fr:"Un jeu d'évasion de prison où des animaux s'échappent de prison, cambriolent des magasins et échappent à la police — énergie chaotique flics-voleurs avec une touche animale.",
+    pt:"Um jogo de fuga de prisão onde pets escapam da cadeia, roubam lojas e fogem da polícia — energia caótica de policiais e ladrões com um toque animal.",
+    de:"Ein Gefängnisausbruch-Spiel, in dem Haustiere aus dem Knast fliehen, Läden ausrauben und der Polizei entkommen — chaotische Cops-und-Räuber-Energie mit Tier-Twist."
+  },
+  "runaways": {
+    he:"משחק בריחה-מפשע בעולם פתוח - שדדו, מכרו שלל, פרצו כספות, ורוצו לגבול לפני שהמשטרה תתפוס אתכם.",
+    es:"Un juego de fuga criminal en mundo abierto — roba, empeña botín, revienta bóvedas, y corre hacia la frontera antes de que te atrape la policía.",
+    fr:"Un jeu d'évasion criminelle en monde ouvert — volez, revendez du butin, crackez des coffres, et filez vers la frontière avant que la police vous attrape.",
+    pt:"Um jogo de fuga criminosa em mundo aberto — roube, empenhe o saque, arrombe cofres, e corra para a fronteira antes que a polícia te pegue.",
+    de:"Ein Open-World-Verbrecher-Fluchtspiel — raube aus, verscherbele Beute, knacke Tresore und flüchte zur Grenze, bevor die Polizei dich schnappt."
+  },
+  "bee-swarm-simulator": {
+    he:"סימולטור אספנות עם עומק אמיתי - קוואסטים, בוסים, שיתוף פעולה. הוכחה שסימולטור יכול להיות עמוס בתוכן.",
+    es:"Un simulador de recolección con profundidad real — misiones, jefes, cooperativo. Prueba de que un simulador puede estar lleno de contenido.",
+    fr:"Un simulateur de collecte avec une vraie profondeur — quêtes, boss, coopératif. La preuve qu'un simulateur peut être rempli de contenu.",
+    pt:"Um simulador de coleta com profundidade real — missões, chefes, cooperativo. Prova de que um simulador pode estar cheio de conteúdo.",
+    de:"Ein Sammel-Simulator mit echter Tiefe — Quests, Bosse, Koop. Beweis, dass ein Simulator vollgepackt mit Inhalt sein kann."
+  },
+  "a-universal-time": {
+    he:"סימולטור קרב בהשראת אנימה עם עולמות, כוחות, ומערכת פרסטיז' שבאמת מרוויחה את מקומה.",
+    es:"Un simulador de combate inspirado en anime con mundos, poderes y un sistema de prestigio que realmente se lo gana.",
+    fr:"Un simulateur de combat inspiré des animes avec des mondes, des pouvoirs et un système de prestige qui mérite vraiment sa place.",
+    pt:"Um simulador de combate inspirado em anime com mundos, poderes e um sistema de prestígio que realmente merece seu lugar.",
+    de:"Ein Anime-inspirierter Kampfsimulator mit Welten, Kräften und einem Prestige-System, das sich seinen Platz wirklich verdient."
+  },
+  "anime-fighting-simulator": {
+    he:"סימולטור לחימה עם מכניקת אימונים אמיתית ופשיטות בוסים מעל הגריינד הרגיל.",
+    es:"Un simulador de combate con mecánicas de entrenamiento reales y asaltos a jefes sobre el grind habitual.",
+    fr:"Un simulateur de combat avec de vraies mécaniques d'entraînement et des raids de boss en plus du grind habituel.",
+    pt:"Um simulador de combate com mecânicas de treino reais e raides de chefes além do grind usual.",
+    de:"Ein Kampfsimulator mit echten Trainingsmechaniken und Boss-Raids obendrauf zum üblichen Grind."
+  },
+  "saber-simulator": {
+    he:"סימולטור אספנות חרבות אור עם חיות מחמד ועולמות - קליל וקזואלי יותר מרוב המשחקים בז'אנר.",
+    es:"Un simulador de coleccionar sables de luz con mascotas y mundos — más ligero y casual que la mayoría del género.",
+    fr:"Un simulateur de collecte de sabres laser avec des animaux de compagnie et des mondes — plus léger et décontracté que la plupart du genre.",
+    pt:"Um simulador de coleção de sabres de luz com pets e mundos — mais leve e casual do que a maioria do gênero.",
+    de:"Ein Lichtschwert-Sammel-Simulator mit Haustieren und Welten — leichter und lockerer als die meisten im Genre."
+  },
+  "mining-simulator-2": {
+    he:"סימולטור כרייה וחיות מחמד עם חקירה אמיתית בין הגריינד - אזורים חבויים, בוסים, סודות.",
+    es:"Un simulador de minería y mascotas con exploración real entre el grind — áreas ocultas, jefes, secretos.",
+    fr:"Un simulateur de minage et d'animaux avec une vraie exploration entre les sessions de grind — zones cachées, boss, secrets.",
+    pt:"Um simulador de mineração e pets com exploração real entre o grind — áreas escondidas, chefes, segredos.",
+    de:"Ein Bergbau- und Haustier-Simulator mit echter Erkundung zwischen dem Grind — versteckte Bereiche, Bosse, Geheimnisse."
+  },
+  "pet-simulator-99": {
+    he:"סימולטור אספנות חיות מחמד בקנה מידה ענק עם מפה עצומה ומתעדכנת באופן פעיל לחקור.",
+    es:"Un simulador de recolección de mascotas a gran escala con un mapa enorme y actualizado activamente para explorar.",
+    fr:"Un simulateur de collecte d'animaux à grande échelle avec une carte immense et activement mise à jour à explorer.",
+    pt:"Um simulador de coleta de pets em grande escala com um mapa enorme e ativamente atualizado para explorar.",
+    de:"Ein groß angelegter Haustier-Sammel-Simulator mit einer riesigen, aktiv aktualisierten Karte zum Erkunden."
+  },
+  "sword-fighters-simulator": {
+    he:"סימולטור שדרוג חרבות פשוט עם התקדמות מספרים-עולים מספקת ואזורי PvP.",
+    es:"Un simulador directo de mejora de espadas con una progresión satisfactoria de números crecientes y zonas de PvP.",
+    fr:"Un simulateur direct d'amélioration d'épées avec une progression satisfaisante de chiffres croissants et des zones PvP.",
+    pt:"Um simulador direto de upgrade de espadas com uma progressão satisfatória de números crescentes e zonas de PvP.",
+    de:"Ein unkomplizierter Schwert-Upgrade-Simulator mit befriedigendem Zahlen-steigen-Fortschritt und PvP-Zonen."
+  },
+  "ability-wars": {
+    he:"משחק שמשלב סימולטור ולחימה שבו אוספים ומשלבים כוחות פרועים, ולעיתים מגוחכים.",
+    es:"Un juego que mezcla simulador y combate donde recolectas y combinas poderes salvajes, a menudo ridículos.",
+    fr:"Un jeu mêlant simulateur et combat où vous collectez et combinez des pouvoirs sauvages, souvent ridicules.",
+    pt:"Um jogo que mistura simulador e luta onde você coleta e combina poderes selvagens, muitas vezes ridículos.",
+    de:"Ein Simulator-Kampf-Hybrid, in dem du wilde, oft absurde Kräfte sammelst und kombinierst."
+  },
+  "slime-simulator": {
+    he:"סימולטור אספנות רגוע על גידול ושילוב סליימים - עומס נמוך וקל להיכנס ולצאת ממנו.",
+    es:"Un simulador de recolección tranquilo sobre criar y combinar slimes — bajo estrés y fácil de retomar y dejar.",
+    fr:"Un simulateur de collecte calme sur l'élevage et la combinaison de slimes — peu stressant et facile à reprendre et arrêter.",
+    pt:"Um simulador de coleta tranquilo sobre cultivar e combinar slimes — baixo estresse e fácil de entrar e sair.",
+    de:"Ein entspannter Sammel-Simulator ums Züchten und Kombinieren von Schleimen — stressfrei und leicht zwischendurch spielbar."
+  },
+  "punching-simulator": {
+    he:"סימולטור אימוני כוח מינימליסטי - לולאה פשוטה, אך התקדמות בקצב טוב שומרת על הסיפוק.",
+    es:"Un simulador minimalista de entrenamiento de fuerza — bucle simple, pero una progresión bien ritmada lo mantiene satisfactorio.",
+    fr:"Un simulateur d'entraînement de force minimaliste — boucle simple, mais une progression bien rythmée le rend satisfaisant.",
+    pt:"Um simulador minimalista de treino de força — loop simples, mas uma progressão bem ritmada o mantém satisfatório.",
+    de:"Ein minimalistischer Kraft-Trainingssimulator — einfacher Loop, aber gut getakteter Fortschritt hält ihn befriedigend."
+  },
+  "muscle-legends": {
+    he:"סימולטור אימוני כוח עם חדרי כושר אמיתיים, תחרויות, ומערכת ציוד עמוקה במפתיע.",
+    es:"Un simulador de entrenamiento de fuerza con gimnasios reales, competiciones y un sistema de equipo sorprendentemente profundo.",
+    fr:"Un simulateur d'entraînement de force avec de vraies salles de sport, des compétitions et un système d'équipement étonnamment profond.",
+    pt:"Um simulador de treino de força com academias reais, competições e um sistema de equipamento surpreendentemente profundo.",
+    de:"Ein Kraft-Trainingssimulator mit echten Fitnessstudios, Wettbewerben und einem überraschend tiefen Ausrüstungssystem."
+  },
+  "needle-in-a-haystack": {
+    he:"סימולטור חיפוש שמבחן סבלנות - חפרו דרך ערמת שחת פרוצדורלית ענקית עם גלאים ניתנים לשדרוג כדי למצוא מחטים נדירות.",
+    es:"Un simulador de búsqueda que pone a prueba la paciencia — excava a través de un enorme pajar procedural con detectores mejorables para encontrar agujas raras.",
+    fr:"Un simulateur de recherche qui teste la patience — creusez dans une immense botte de foin procédurale avec des détecteurs améliorables pour trouver des aiguilles rares.",
+    pt:"Um simulador de busca que testa a paciência — cave por um enorme palheiro procedural com detectores upgradáveis para achar agulhas raras.",
+    de:"Ein geduldstestender Such-Simulator — grabe durch einen riesigen, prozeduralen Heuhaufen mit aufrüstbaren Detektoren, um seltene Nadeln zu finden."
+  },
+  "catch-1-billion-ducks": {
+    he:"סימולטור ציד ברווזים עם כלב מלווה נאמן - יורים, אוספים, מוכרים, ומשדרגים ציוד מול להקות אגרסיביות יותר ויותר.",
+    es:"Un simulador de caza de patos con un fiel compañero canino — dispara, recolecta, vende y mejora tu equipo frente a bandadas cada vez más agresivas.",
+    fr:"Un simulateur de chasse aux canards avec un fidèle compagnon canin — tirez, collectez, vendez et améliorez votre équipement face à des volées de plus en plus agressives.",
+    pt:"Um simulador de caça a patos com um fiel companheiro canino — atire, colete, venda e melhore seu equipamento contra bandos cada vez mais agressivos.",
+    de:"Ein Entenjagd-Simulator mit treuem Hundebegleiter — schießen, sammeln, verkaufen und Ausrüstung upgraden gegen immer aggressivere Schwärme."
+  },
+  "clean-the-golf-yard": {
+    he:"סימולטור אספנות מספק - נקו מגרש גולף קבור בכדורים, מכרו את השלל, ושדרגו ציוד כדי לעבוד מהר יותר.",
+    es:"Un simulador de recolección satisfactorio — limpia un campo de golf enterrado en pelotas, vende tu botín y mejora tu equipo para trabajar más rápido.",
+    fr:"Un simulateur de collecte satisfaisant — nettoyez un terrain de golf enseveli sous les balles, vendez votre butin et améliorez votre équipement pour travailler plus vite.",
+    pt:"Um simulador de coleta satisfatório — limpe um campo de golfe enterrado em bolas, venda seu saque e melhore seu equipamento para trabalhar mais rápido.",
+    de:"Ein befriedigender Sammel-Simulator — räume einen mit Bällen übersäten Golfplatz frei, verkaufe deine Beute und rüste deine Ausrüstung für schnelleres Arbeiten auf."
+  },
+  "football-fusion-2": {
+    he:"סימולטור פוטבול אמריקאי עמוק באמת עם עמדות, מהלכים, ופיזיקה אמיתיים. בנוי לאנשים שבאמת מכירים את הספורט.",
+    es:"Un simulador de fútbol americano genuinamente profundo con posiciones, jugadas y física reales. Hecho para quienes realmente conocen el deporte.",
+    fr:"Un simulateur de football américain vraiment poussé avec des postes, des schémas et une physique réels. Fait pour ceux qui connaissent vraiment le sport.",
+    pt:"Um simulador de futebol americano genuinamente profundo com posições, jogadas e física reais. Feito para quem realmente conhece o esporte.",
+    de:"Ein wirklich tiefgehender American-Football-Simulator mit echten Positionen, Spielzügen und Physik. Gemacht für Leute, die den Sport wirklich kennen."
+  },
+  "basketball-zero": {
+    he:"משחקיות כדורסל עמוקה במפתיע עם אנימציות זורמות ויריות מבוססות מיומנות - איכות שעולה על מספר השחקנים שלו.",
+    es:"Un juego de baloncesto sorprendentemente profundo con animaciones fluidas y tiros basados en habilidad — calidad que supera su número de jugadores.",
+    fr:"Un gameplay de basketball étonnamment profond avec des animations fluides et des tirs basés sur la compétence — une qualité qui dépasse son nombre de joueurs.",
+    pt:"Uma jogabilidade de basquete surpreendentemente profunda com animações fluidas e arremessos baseados em habilidade — qualidade que supera seu número de jogadores.",
+    de:"Überraschend tiefgehendes Basketball-Gameplay mit fließenden Animationen und skillbasiertem Werfen — Qualität, die seine Spielerzahl übertrifft."
+  },
+  "volleyball-legends": {
+    he:"משחק כדורעף מהיר עם מכניקת תזמון אמיתית וסולם תחרותי מספק.",
+    es:"Un juego de voleibol rápido con mecánicas de timing reales y una escalera competitiva satisfactoria.",
+    fr:"Un jeu de volley-ball rapide avec de vraies mécaniques de timing et une échelle compétitive satisfaisante.",
+    pt:"Um jogo de vôlei rápido com mecânicas reais de timing e uma escada competitiva satisfatória.",
+    de:"Ein schnelles Volleyballspiel mit echter Timing-Mechanik und befriedigender Ranglisten-Leiter."
+  },
+  "speed-run-4": {
+    he:"קלאסיקת ספידראן פארקור - עשרות שלבים בנויים כולם סביב שליטה בתנועה ומרוצי זמן.",
+    es:"Un clásico de speedrunning de parkour — decenas de niveles construidos puramente en torno al dominio del movimiento y las contrarrelojes.",
+    fr:"Un classique du speedrunning de parkour — des dizaines de niveaux construits purement autour de la maîtrise du mouvement et du chrono.",
+    pt:"Um clássico de speedrun de parkour — dezenas de níveis construídos puramente em torno do domínio de movimento e contrarrelógios.",
+    de:"Ein Parkour-Speedrunning-Klassiker — Dutzende Level, die rein auf Bewegungsbeherrschung und Zeitläufe ausgelegt sind."
+  },
+  "vehicle-legends": {
+    he:"אספנות ונהיגת רכבים עם פיזיקה מכובדת. לא עוד משחק 'קליק לכסף' - יש כאן מיומנות אמיתית.",
+    es:"Colección y conducción de vehículos con física respetable. No otro juego de 'clic para ganar dinero' — aquí hay habilidad real.",
+    fr:"Collection et conduite de véhicules avec une physique respectable. Pas un autre jeu 'cliquer pour de l'argent' — il y a de la vraie compétence ici.",
+    pt:"Coleção e condução de veículos com física respeitável. Não é mais um jogo de 'clicar por dinheiro' — há habilidade real aqui.",
+    de:"Fahrzeugsammeln und -fahren mit anständiger Physik. Kein weiteres 'Klick-für-Geld'-Spiel — hier steckt echtes Können drin."
+  },
+  "ultimate-driving": {
+    he:"משחק נהיגה בעולם פתוח עם חוקי תנועה אמיתיים וקהילת רול-פליי רצינית באופן מפתיע סביבו.",
+    es:"Un juego de conducción en mundo abierto con reglas de tráfico reales y una comunidad de roleplay sorprendentemente seria.",
+    fr:"Un jeu de conduite en monde ouvert avec de vraies règles de circulation et une communauté de roleplay étonnamment sérieuse.",
+    pt:"Um jogo de direção em mundo aberto com regras de trânsito reais e uma comunidade de roleplay surpreendentemente séria.",
+    de:"Ein Open-World-Fahrspiel mit echten Verkehrsregeln und einer überraschend ernsthaften Rollenspiel-Community drumherum."
+  },
+  "car-crushers-2": {
+    he:"משחק מכוניות סנדבוקס על קנייה, בדיקה, וכן, הרס של רשימת רכבים ענקית.",
+    es:"Un juego de autos sandbox sobre comprar, probar y, sí, destruir una enorme lista de vehículos.",
+    fr:"Un jeu de voitures bac à sable sur l'achat, les tests et, oui, la destruction d'un immense catalogue de véhicules.",
+    pt:"Um jogo de carros sandbox sobre comprar, testar e, sim, destruir um enorme catálogo de veículos.",
+    de:"Ein Sandbox-Autospiel ums Kaufen, Testen und, ja, Zerstören eines riesigen Fahrzeugkatalogs."
+  },
+  "driving-empire": {
+    he:"סימולטור נהיגה עם היגוי ריאליסטי וקטלוג רכבים ענק וגדל למי שאכפת לו מרכבים.",
+    es:"Un simulador de conducción con manejo realista y un catálogo de autos enorme y creciente para quienes les importan los autos.",
+    fr:"Un simulateur de conduite avec une conduite réaliste et un catalogue de voitures immense et croissant pour ceux qui aiment les voitures.",
+    pt:"Um simulador de direção com manejo realista e um catálogo de carros enorme e crescente para quem se importa com carros.",
+    de:"Ein Fahrsimulator mit realistischem Handling und einem riesigen, wachsenden Autokatalog für alle, denen Autos wichtig sind."
+  },
+  "roblox-grand-prix": {
+    he:"משחק מירוצי קארטינג עם עיצוב מסלולים אמיתי ומכניקת החלקה - אנרגיית מריו קארט, ביצוע רובלוקס.",
+    es:"Un juego de carreras de karts con diseño de pistas genuino y mecánicas de derrape — energía de Mario Kart, ejecución de Roblox.",
+    fr:"Un jeu de course de karts avec une vraie conception de pistes et des mécaniques de dérapage — énergie Mario Kart, exécution Roblox.",
+    pt:"Um jogo de corrida de kart com design de pistas genuíno e mecânicas de drift — energia de Mario Kart, execução Roblox.",
+    de:"Ein Kart-Rennspiel mit echtem Streckendesign und Drift-Mechanik — Mario-Kart-Energie, Roblox-Umsetzung."
+  },
+  "tower-of-hell": {
+    he:"מגדל אובי אכזרי ומיוצר-אקראית שמתאפס כל הזמן. סשנים קצרים, מתח גבוה, עקומת קושי ממכרת.",
+    es:"Una torre obby brutal y generada aleatoriamente que se reinicia constantemente. Sesiones cortas, alta tensión, curva de dificultad adictiva.",
+    fr:"Une tour obby brutale et générée aléatoirement qui se réinitialise constamment. Sessions courtes, tension élevée, courbe de difficulté addictive.",
+    pt:"Uma torre obby brutal e gerada aleatoriamente que reinicia constantemente. Sessões curtas, alta tensão, curva de dificuldade viciante.",
+    de:"Ein brutaler, zufällig generierter Obby-Turm, der sich ständig zurücksetzt. Kurze Sessions, hohe Spannung, süchtig machende Schwierigkeitskurve."
+  },
+  "mega-fun-obby": {
+    he:"אובי ענק מבוסס-נקודות-ביקורת עם מאות שלבים - האופציה האמינה של הז'אנר לטווח ארוך.",
+    es:"Un obby masivo basado en puntos de control con cientos de etapas — la opción confiable del género para el largo plazo.",
+    fr:"Un obby massif basé sur des points de contrôle avec des centaines d'étapes — l'option fiable du genre pour le long terme.",
+    pt:"Um obby massivo baseado em checkpoints com centenas de estágios — a opção confiável do gênero para o longo prazo.",
+    de:"Ein riesiges Checkpoint-basiertes Obby mit Hunderten Stufen — die verlässliche Langzeit-Option des Genres."
+  },
+  "flee-the-facility": {
+    he:"משחק מחבואים-ובריחה עם מכניקת פארקור אמיתית לצד הבורח. מתוח וקל לשחק שוב.",
+    es:"Un juego de escondite y escape con mecánicas de parkour reales para el lado que huye. Tenso y rápido de rejugar.",
+    fr:"Un jeu de cache-cache et d'évasion avec de vraies mécaniques de parkour pour le côté qui fuit. Tendu et rapide à rejouer.",
+    pt:"Um jogo de esconde-esconde e fuga com mecânicas reais de parkour para o lado que foge. Tenso e rápido de jogar novamente.",
+    de:"Ein Versteck-und-Flucht-Spiel mit echter Parkour-Mechanik für die fliehende Seite. Angespannt und schnell wiederspielbar."
+  },
+  "natural-disaster-survival": {
+    he:"משחק הישרדות שבו מגיבים לאסונות סביבתיים משתנים בכל סיבוב. קלאסיקה אמיתית שעדיין מחזיקה מעמד.",
+    es:"Un juego de supervivencia donde reaccionas a desastres ambientales cambiantes cada ronda. Un clásico genuino que sigue vigente.",
+    fr:"Un jeu de survie où vous réagissez à des catastrophes environnementales changeantes à chaque round. Un vrai classique qui tient toujours la route.",
+    pt:"Um jogo de sobrevivência onde você reage a desastres ambientais em mudança a cada rodada. Um clássico genuíno que ainda se sustenta.",
+    de:"Ein Survival-Spiel, in dem du in jeder Runde auf wechselnde Umweltkatastrophen reagierst. Ein echter Klassiker, der sich immer noch hält."
+  },
+  "epic-minigames": {
+    he:"פלייליסט מתחלף של מיני-משחקים מהירים, קרוב יותר לאוסף משחקי מסיבה מאשר פורמט יחיד.",
+    es:"Una lista rotativa de minijuegos rápidos, más cercana a una colección de juegos de fiesta que a un formato único.",
+    fr:"Une playlist tournante de mini-jeux rapides, plus proche d'une collection de jeux de soirée que d'un format unique.",
+    pt:"Uma playlist rotativa de minijogos rápidos, mais próxima de uma coleção de jogos de festa do que um formato único.",
+    de:"Eine rotierende Playlist schneller Minispiele, eher eine Partyspiel-Sammlung als ein einzelnes Format."
+  },
+  "jaywalking": {
+    he:"פלטפורמר דיוק על חציית כבישים ומכשולים מסוכנים ומשתנים כל הזמן. הנחה פשוטה, ביצוע חד.",
+    es:"Un plataformas de precisión sobre cruzar carreteras y obstáculos peligrosos y siempre cambiantes. Premisa simple, ejecución precisa.",
+    fr:"Un jeu de plateforme de précision sur la traversée de routes et d'obstacles dangereux et changeants. Concept simple, exécution précise.",
+    pt:"Um platformer de precisão sobre atravessar estradas e obstáculos perigosos e sempre em mudança. Premissa simples, execução precisa.",
+    de:"Ein Präzisions-Plattformer über das Überqueren gefährlicher, sich ständig ändernder Straßen und Hindernisse. Einfache Prämisse, scharfe Umsetzung."
+  },
+  "theme-park-tycoon-2": {
+    he:"סימולטור בניית פארקים עמוק באמת עם כלי עיצוב רכבות הרים אמיתיים - קרוב יותר לסימולטור פארק אמיתי מאשר טייקון טיפוסי.",
+    es:"Un simulador de construcción de parques genuinamente profundo con herramientas reales de diseño de atracciones — más cercano a un simulador de parque real que a un tycoon típico.",
+    fr:"Un simulateur de construction de parcs vraiment poussé avec de vrais outils de conception d'attractions — plus proche d'un vrai simulateur de parc que d'un tycoon classique.",
+    pt:"Um simulador de construção de parques genuinamente profundo com ferramentas reais de design de atrações — mais perto de um simulador de parque real do que um tycoon típico.",
+    de:"Ein wirklich tiefgehender Freizeitpark-Bausimulator mit echten Fahrgeschäft-Design-Tools — näher an einem echten Park-Simulator als an einem typischen Tycoon."
+  },
+  "restaurant-tycoon-2": {
+    he:"סימולטור ניהול מסעדה עם איוש כוח אדם, פריסה, ומכניקת זרימת לקוחות אמיתיים לאופטימיזציה.",
+    es:"Un simulador de gestión de restaurantes con personal, diseño y mecánicas de flujo de clientes reales para optimizar.",
+    fr:"Un simulateur de gestion de restaurant avec du vrai personnel, une disposition et des mécaniques de flux de clients à optimiser.",
+    pt:"Um simulador de gestão de restaurante com equipe, layout e mecânicas reais de fluxo de clientes para otimizar.",
+    de:"Ein Restaurant-Management-Simulator mit echtem Personal, Layout und Kundenfluss-Mechaniken zum Optimieren."
+  },
+  "lumber-tycoon-2": {
+    he:"טייקון מסחר ויצירה הבנוי סביב כלכלה אמיתית בתוך המשחק ושווקים מונעי-שחקנים.",
+    es:"Un tycoon de comercio y crafteo construido en torno a una economía real dentro del juego y mercados impulsados por jugadores.",
+    fr:"Un tycoon de commerce et d'artisanat construit autour d'une économie réelle dans le jeu et de marchés animés par les joueurs.",
+    pt:"Um tycoon de comércio e crafting construído em torno de uma economia real no jogo e mercados guiados por jogadores.",
+    de:"Ein Handels- und Crafting-Tycoon, aufgebaut um eine echte Ingame-Wirtschaft und spielergesteuerte Märkte."
+  },
+  "retail-tycoon-2": {
+    he:"טייקון בניית חנות על פריסה, מלאי, ואסטרטגיית תמחור - יותר מחושב מלולאת טייקון ממוצעת.",
+    es:"Un tycoon de construcción de tiendas sobre diseño, inventario y estrategia de precios — más reflexivo que el bucle promedio de tycoon.",
+    fr:"Un tycoon de construction de magasin sur la disposition, le stock et la stratégie de prix — plus réfléchi que la boucle tycoon moyenne.",
+    pt:"Um tycoon de construção de loja sobre layout, estoque e estratégia de preços — mais pensado do que o loop médio de tycoon.",
+    de:"Ein Laden-Bau-Tycoon rund um Layout, Lagerbestand und Preisstrategie — durchdachter als der durchschnittliche Tycoon-Loop."
+  },
+  "mad-city": {
+    he:"עיר פתוחה גיבורים-נגד-נבלים עם בסיסים ומטרות בסגנון טייקון על גבי חופש תנועה.",
+    es:"Una ciudad abierta de héroes contra villanos con bases y objetivos estilo tycoon sobre libre exploración.",
+    fr:"Une ville ouverte héros contre méchants avec des bases et objectifs façon tycoon par-dessus le libre parcours.",
+    pt:"Uma cidade aberta de heróis contra vilões com bases e objetivos estilo tycoon sobre o livre roaming.",
+    de:"Eine Helden-gegen-Schurken-Open-World-Stadt mit Tycoon-artigen Basen und Zielen obendrauf auf Free Roam."
+  },
+  "pizza-factory-tycoon": {
+    he:"טייקון בניית מפעל מהיר על אוטומציה יעילה של קווי ייצור פיצה.",
+    es:"Un tycoon de construcción de fábricas rápido sobre automatizar eficientemente líneas de producción de pizza.",
+    fr:"Un tycoon de construction d'usine rapide sur l'automatisation efficace des lignes de production de pizza.",
+    pt:"Um tycoon de construção de fábrica rápido sobre automatizar eficientemente linhas de produção de pizza.",
+    de:"Ein temporeicher Fabrikbau-Tycoon ums effiziente Automatisieren von Pizza-Produktionslinien."
+  },
+  "zoo-tycoon": {
+    he:"משחק בניית וניהול גן חיות עם מערכות טיפול בבעלי חיים אמיתיות והחלטות עיצוב פארק.",
+    es:"Un juego de construcción y gestión de zoológico con sistemas reales de cuidado animal y decisiones de diseño de parque.",
+    fr:"Un jeu de construction et gestion de zoo avec de vrais systèmes de soins aux animaux et des décisions de conception de parc.",
+    pt:"Um jogo de construção e gestão de zoológico com sistemas reais de cuidado animal e decisões de design de parque.",
+    de:"Ein Zoo-Bau- und Managementspiel mit echten Tierpflege-Systemen und Parkdesign-Entscheidungen."
+  },
+  "bloxburg-tycoon-mode": {
+    he:"מערכות העבודה והעסק של Bloxburg משמשות גם כשכבת טייקון קלה - להרוויח, לשדרג, ולבנות קריירה לצד הבית שלכם.",
+    es:"Los sistemas de trabajo y negocios de Bloxburg funcionan también como una capa ligera de tycoon — gana, mejora y construye una carrera junto a tu casa.",
+    fr:"Les systèmes de travail et d'entreprise de Bloxburg font aussi office de couche tycoon légère — gagnez, améliorez et bâtissez une carrière à côté de votre maison.",
+    pt:"Os sistemas de trabalho e negócios do Bloxburg funcionam também como uma camada leve de tycoon — ganhe, melhore e construa uma carreira ao lado da sua casa.",
+    de:"Bloxburgs Job- und Geschäftssysteme fungieren auch als leichte Tycoon-Schicht — verdiene, rüste auf und baue eine Karriere neben deinem Haus auf."
+  },
+  "car-dealership-tycoon": {
+    he:"טייקון מסחר רכבים עם פרטי עיצוב אמיתיים, התאמה אישית, וכלכלת רכבים עמוקה באמת.",
+    es:"Un tycoon de comercio de autos con detallado real, personalización y una economía de vehículos genuinamente profunda.",
+    fr:"Un tycoon de vente de voitures avec un vrai détaillage, une personnalisation et une économie de véhicules vraiment profonde.",
+    pt:"Um tycoon de comércio de carros com detalhamento real, personalização e uma economia de veículos genuinamente profunda.",
+    de:"Ein Autohändler-Tycoon mit echtem Detailing, Anpassung und einer wirklich tiefen Fahrzeugwirtschaft."
+  },
+  "sell-lemons": {
+    he:"טייקון אינקרמנטלי על בניית אימפריית מכירת לימונדה מדולר אחד - מערכות לידה-מחדש ואבולוציה שכבתיות שומרות על הגריינד מעניין.",
+    es:"Un tycoon incremental sobre construir un imperio de venta de limones desde un solo dólar — sistemas de renacimiento y evolución en capas mantienen el grind interesante.",
+    fr:"Un tycoon incrémental sur la construction d'un empire de vente de citrons à partir d'un seul dollar — des systèmes de renaissance et d'évolution en couches gardent le grind intéressant.",
+    pt:"Um tycoon incremental sobre construir um império de venda de limões a partir de um único dólar — sistemas de renascimento e evolução em camadas mantêm o grind interessante.",
+    de:"Ein inkrementeller Tycoon ums Aufbauen eines Zitronenverkaufs-Imperiums aus einem einzigen Dollar — geschichtete Wiedergeburts- und Evolutionssysteme halten den Grind interessant."
+  },
+  "violent-party": {
+    he:"משחק מכונות מסיבה כאוטי - אספנות פריטים ומיני-משחקים מטורללים עם חברים.",
+    es:"Un caótico juego de máquinas de fiesta — recolectar objetos y minijuegos alocados con amigos.",
+    fr:"Un jeu de machines de fête chaotique — collecter des objets et des mini-jeux déjantés entre amis.",
+    pt:"Um caótico jogo de máquinas de festa — colecionar itens e minijogos malucos com amigos.",
+    de:"Ein chaotisches Party-Maschinen-Spiel — Gegenstände sammeln und verrückte Minispiele mit Freunden."
+  },
+  "mukbang-game": {
+    he:"סימולטור אכילה/ASMR - הזמינו מאות סוגי אוכל ואכלו אותם בגוף ראשון עם צלילים ריאליסטיים. מוזר וממכר בו זמנית.",
+    es:"Un simulador de comer/ASMR — pide cientos de comidas y cómelas en primera persona con sonidos realistas. Raro y adictivo a la vez.",
+    fr:"Un simulateur de manger/ASMR — commandez des centaines de plats et mangez-les à la première personne avec des sons réalistes. Étrange et addictif à la fois.",
+    pt:"Um simulador de comer/ASMR — peça centenas de comidas e coma-as em primeira pessoa com sons realistas. Estranho e viciante ao mesmo tempo.",
+    de:"Ein Ess-/ASMR-Simulator — bestelle Hunderte Gerichte und iss sie in der Ich-Perspektive mit realistischen Geräuschen. Seltsam und süchtig machend zugleich."
+  },
+  "untitled-bakery": {
+    he:"חוויה נעימה בנושא אפייה - טובה לסשן רגוע ופחות אינטנסיבי.",
+    es:"Una experiencia acogedora de temática de panadería — buena para una sesión más relajada y tranquila.",
+    fr:"Une expérience chaleureuse sur le thème de la pâtisserie — bonne pour une session plus détendue.",
+    pt:"Uma experiência aconchegante com temática de padaria — boa para uma sessão mais tranquila e relaxada.",
+    de:"Ein gemütliches Bäckerei-Erlebnis — gut für eine ruhigere, entspanntere Session."
+  },
+  "cineblox": {
+    he:"מרחב מפגש בנושא קולנוע/תיאטרון לצפייה ובילוי חברתי.",
+    es:"Un espacio de reunión de temática cine/teatro para ver y socializar.",
+    fr:"Un espace de rencontre sur le thème cinéma/théâtre pour regarder et socialiser.",
+    pt:"Um espaço de encontro com temática de cinema/teatro para assistir e socializar.",
+    de:"Ein Kino-/Theater-Treffpunkt zum Anschauen und Socializen."
+  },
+  "climb-a-mountain": {
+    he:"משחק אתגר טיפוס פיזי - קל לקפוץ פנימה, מספק לשלוט בו.",
+    es:"Un juego de escalada física — fácil de empezar, satisfactorio de dominar.",
+    fr:"Un jeu d'escalade physique — facile à prendre en main, satisfaisant à maîtriser.",
+    pt:"Um jogo de escalada física — fácil de começar, satisfatório de dominar.",
+    de:"Ein physisches Kletter-Herausforderungsspiel — leicht reinzukommen, befriedigend zu meistern."
+  },
+  "drain-the-lake": {
+    he:"משחק ציד אוצרות על ניקוז אגם כדי לראות - ולתפוס - כל מה שמסתתר מתחת.",
+    es:"Un juego de caza del tesoro sobre drenar un lago para ver — y agarrar — lo que sea que esté escondido debajo.",
+    fr:"Un jeu de chasse au trésor sur le drainage d'un lac pour voir — et récupérer — tout ce qui se cache dessous.",
+    pt:"Um jogo de caça ao tesouro sobre drenar um lago para ver — e pegar — o que estiver escondido embaixo.",
+    de:"Ein Schatzsuchspiel ums Ablassen eines Sees, um zu sehen — und zu schnappen — was auch immer sich darunter verbirgt."
+  },
+  "rv-chaos": {
+    he:"משחק רכב כאוטי המתמקד בקרוואן ובכל מה שיכול להשתבש בו.",
+    es:"Un juego caótico basado en vehículos centrado en una autocaravana y todo lo que puede salir mal en ella.",
+    fr:"Un jeu de véhicule chaotique centré sur un camping-car et tout ce qui peut y mal tourner.",
+    pt:"Um jogo caótico baseado em veículos centrado em uma motorhome e tudo que pode dar errado nela.",
+    de:"Ein chaotisches Fahrzeugspiel rund um ein Wohnmobil und alles, was darin schiefgehen kann."
+  },
+  "sevenm-hood-testing": {
+    he:"חוויית 'hood' בעולם פתוח עם פירוט מפה אמיתי ומכניקת חקירה.",
+    es:"Una experiencia de 'hood' en mundo abierto con un detalle de mapa real y mecánicas de exploración.",
+    fr:"Une expérience 'hood' en monde ouvert avec un vrai détail de carte et des mécaniques d'exploration.",
+    pt:"Uma experiência de 'hood' em mundo aberto com detalhe real de mapa e mecânicas de exploração.",
+    de:"Ein Open-World-'Hood'-Erlebnis mit echtem Kartendetail und Erkundungsmechanik."
+  },
+  "mulberry-county": {
+    he:"משחק אימה עיירה-קטנה אטמוספרי עם תחושת אימה חזקה וקהילת מעריצים מסורה.",
+    es:"Un juego de terror de pueblo pequeño atmosférico con una fuerte sensación de pavor y seguidores dedicados.",
+    fr:"Un jeu d'horreur de petite ville atmosphérique avec une forte sensation d'angoisse et des fans dévoués.",
+    pt:"Um jogo de terror de cidade pequena atmosférico com forte sensação de pavor e seguidores dedicados.",
+    de:"Ein atmosphärisches Kleinstadt-Horrorspiel mit starkem Gefühl von Grauen und treuer Fangemeinde."
+  },
+  "the-deep-end": {
+    he:"משחק אימה-הישרדות שמתרחש סביב מים כהים - בידוד ומתח על פני פחדים זולים.",
+    es:"Un juego de terror-supervivencia ambientado en aguas oscuras — aislamiento y tensión sobre sustos baratos.",
+    fr:"Un jeu d'horreur-survie se déroulant autour d'eaux sombres — isolement et tension plutôt que des frayeurs bon marché.",
+    pt:"Um jogo de terror-sobrevivência ambientado em águas escuras — isolamento e tensão em vez de sustos baratos.",
+    de:"Ein Survival-Horror-Spiel rund um dunkles Wasser — Isolation und Spannung statt billiger Schreckmomente."
+  },
+  "hatman": {
+    he:"משחק אימה פולחני-קלאסי עם סגנון ויזואלי ייחודי וקהילת אוהדים נאמנה במפתיע לטווח ארוך.",
+    es:"Un juego de terror de culto clásico con un estilo visual distintivo y seguidores sorprendentemente leales a largo plazo.",
+    fr:"Un jeu d'horreur culte classique avec un style visuel distinctif et des fans étonnamment fidèles sur le long terme.",
+    pt:"Um jogo de terror cult clássico com estilo visual distinto e seguidores surpreendentemente leais a longo prazo.",
+    de:"Ein klassisches Kult-Horrorspiel mit unverwechselbarem visuellem Stil und überraschend treuer Langzeit-Community."
+  },
+  "1981-the-game": {
+    he:"משחק אימה בהשראת סלשר שמשחק עם קלישאות סרטי אימה קלאסיים משנות ה-80.",
+    es:"Un juego de terror inspirado en slashers que juega con tropos clásicos de películas de terror de los 80.",
+    fr:"Un jeu d'horreur inspiré des slashers qui reprend les clichés classiques des films d'horreur des années 80.",
+    pt:"Um jogo de terror inspirado em slashers que brinca com clichês clássicos de filmes de terror dos anos 80.",
+    de:"Ein Slasher-inspiriertes Horrorspiel, das mit klassischen 80er-Horrorfilm-Klischees spielt."
+  },
+  "scorched-earth": {
+    he:"סנדבוקס בנייה-וירי שבו אפשר לחפור מנהרות ולבנות מבצרים ענקיים - אנרגיית מיינקראפט עם קרב רובלוקס.",
+    es:"Un sandbox de construir y disparar donde puedes cavar túneles y construir fortalezas masivas — energía de Minecraft con combate de Roblox.",
+    fr:"Un bac à sable construction-tir où vous pouvez creuser des tunnels et construire des forteresses massives — énergie Minecraft avec combat Roblox.",
+    pt:"Um sandbox de construir e atirar onde você pode cavar túneis e construir fortalezas enormes — energia de Minecraft com combate do Roblox.",
+    de:"Eine Bau-und-Schieß-Sandbox, in der du Tunnel graben und riesige Festungen bauen kannst — Minecraft-Energie mit Roblox-Kampf."
+  },
+  "land-or-die": {
+    he:"משחק הישרדות-מטוס שיתופי כאוטי - הטייס יצא מכלל פעולה, והצוות שלכם צריך לתקן מערכות, להרגיע נוסעים, ולנחות בבטחה לפני שיקרה אסון.",
+    es:"Un caótico juego cooperativo de supervivencia en avión — el piloto está fuera de combate, y tu tripulación debe reparar sistemas, calmar pasajeros, y aterrizar a salvo antes del desastre.",
+    fr:"Un jeu coopératif chaotique de survie en avion — le pilote est hors service, et votre équipage doit réparer les systèmes, calmer les passagers, et atterrir en sécurité avant le désastre.",
+    pt:"Um caótico jogo cooperativo de sobrevivência em avião — o piloto está fora de ação, e sua tripulação precisa consertar sistemas, acalmar passageiros e pousar em segurança antes do desastre.",
+    de:"Ein chaotisches Koop-Flugzeug-Überlebensspiel — der Pilot ist ausgefallen, und deine Crew muss Systeme reparieren, Passagiere beruhigen und sicher landen, bevor die Katastrophe zuschlägt."
+  },
+  "burgerz": {
+    he:"נהלו מזנון המבורגרים כאוטי, שרדו פשיטות, ושמרו על השדרוג של החנות - חצי משחק בישול, חצי אימה-הישרדות.",
+    es:"Dirige un caótico local de hamburguesas, sobrevive a asaltos y mantén la tienda mejorada — mitad juego de cocina, mitad terror-supervivencia.",
+    fr:"Gérez un fast-food chaotique, survivez aux raids et maintenez la boutique à niveau — moitié jeu de cuisine, moitié horreur-survie.",
+    pt:"Administre uma lanchonete caótica, sobreviva a invasões e mantenha a loja atualizada — metade jogo de cozinha, metade terror-sobrevivência.",
+    de:"Betreibe einen chaotischen Burgerladen, überlebe Überfälle und halte den Laden aufgerüstet — halb Kochspiel, halb Survival-Horror."
+  },
+  "ai-judge": {
+    he:"תוכנית משחק מסיבה מהירה - ענו על תרחיש אקראי תוך 30 שניות ותנו לשופט AI להחליט מי מצחיק, חכם, או מוזר יותר.",
+    es:"Un programa de juegos de fiesta rápido — responde un escenario aleatorio en 30 segundos y deja que un juez de IA decida quién es más gracioso, listo o raro.",
+    fr:"Un jeu télévisé de fête rapide — répondez à un scénario aléatoire en 30 secondes et laissez un juge IA décider qui est le plus drôle, intelligent ou bizarre.",
+    pt:"Um game show de festa rápido — responda a um cenário aleatório em 30 segundos e deixe um juiz de IA decidir quem é mais engraçado, inteligente ou estranho.",
+    de:"Eine schnelle Party-Gameshow — beantworte ein zufälliges Szenario in 30 Sekunden und lass einen KI-Richter entscheiden, wer lustiger, klüger oder seltsamer ist."
+  },
+  "cheating-during-testing": {
+    he:"משחק חמקנות מתוח על העתקת תשובות בלי שהמורה ישים לב - קריאת דפוסי מבט ותזמון כל מהלך מסוכן.",
+    es:"Un tenso juego de sigilo sobre copiar respuestas sin que el profesor se dé cuenta — leyendo patrones de mirada y sincronizando cada movimiento arriesgado.",
+    fr:"Un jeu d'infiltration tendu sur le fait de copier des réponses sans que le professeur ne le remarque — lire les regards et chronométrer chaque geste risqué.",
+    pt:"Um tenso jogo de furtividade sobre copiar respostas sem que o professor perceba — lendo padrões de olhar e cronometrando cada movimento arriscado.",
+    de:"Ein angespanntes Schleichspiel ums Abschreiben von Antworten, ohne dass der Lehrer es merkt — Blickmuster lesen und jeden riskanten Zug timen."
+  },
+  "survive-7-days-in-arctic": {
+    he:"משחק הישרדות שיתופי על החזקת מעמד מול הטבע הקפוא - בנו מחסה, שמרו על מדורה בוערת, ודגו אוכל עד שההצלה תגיע.",
+    es:"Un juego de supervivencia cooperativo sobre resistir la naturaleza congelada — construye refugio, mantén una fogata encendida, y pesca comida hasta que llegue el rescate.",
+    fr:"Un jeu de survie coopératif sur la résistance à la nature glacée — construisez un abri, gardez un feu allumé, et pêchez de la nourriture jusqu'à l'arrivée des secours.",
+    pt:"Um jogo de sobrevivência cooperativo sobre resistir à natureza congelada — construa abrigo, mantenha uma fogueira acesa, e pesque comida até o resgate chegar.",
+    de:"Ein Koop-Überlebensspiel ums Durchhalten in eisiger Wildnis — baue Unterschlupf, halte ein Feuer am Brennen und fische nach Essen, bis die Rettung eintrifft."
+  },
+  "bumpy-flight": {
+    he:"משחק תעופה שיתופי - הכינו את המטוס, טענו מטען, טפלו בחירומים באמצע טיסה, ונחתו את הצוות שלכם בבטחה יחד.",
+    es:"Un juego de aviación cooperativo — prepara la aeronave, carga el equipaje, maneja emergencias en pleno vuelo, y aterriza a tu tripulación a salvo juntos.",
+    fr:"Un jeu d'aviation coopératif — préparez l'avion, chargez les bagages, gérez les urgences en vol, et faites atterrir votre équipage en toute sécurité ensemble.",
+    pt:"Um jogo de aviação cooperativo — prepare a aeronave, carregue a bagagem, lide com emergências em pleno voo, e pouse sua tripulação em segurança juntos.",
+    de:"Ein Koop-Flugspiel — bereite das Flugzeug vor, lade Gepäck, bewältige Notfälle mitten im Flug und lande deine Crew sicher zusammen."
+  },
+  "identity-fraud": {
+    he:"משחק בריחה מתוח על מציאת דרך החוצה מבית משתנה ומטריד - חלק חידה, חלק אימה.",
+    es:"Un tenso juego de escape sobre encontrar la salida de una casa cambiante e inquietante — parte puzzle, parte terror.",
+    fr:"Un jeu d'évasion tendu sur le fait de trouver son chemin hors d'une maison changeante et troublante — mi-énigme, mi-horreur.",
+    pt:"Um tenso jogo de fuga sobre encontrar a saída de uma casa mutável e perturbadora — parte puzzle, parte terror.",
+    de:"Ein angespanntes Escape-Spiel darüber, aus einem sich verändernden, verstörenden Haus herauszufinden — teils Rätsel, teils Horror."
+  },
+  "escape-room": {
+    he:"אוסף מתחלף של חדרי בריחה נושאיים עם חידות היגיון אמיתיות, בנוי למשחק עם חברים.",
+    es:"Un conjunto rotativo de escape rooms temáticos con acertijos lógicos genuinos, hecho para jugar con amigos.",
+    fr:"Un ensemble tournant d'escape rooms à thème avec de vraies énigmes logiques, conçu pour jouer entre amis.",
+    pt:"Um conjunto rotativo de escape rooms temáticos com quebra-cabeças lógicos genuínos, feito para jogar com amigos.",
+    de:"Eine rotierende Auswahl thematischer Escape Rooms mit echten Logikrätseln, gemacht zum Spielen mit Freunden."
+  },
+  "find-the-markers": {
+    he:"סדרת חקירה מחבואים ותיקה על מציאת פריטי אספנות חבויים על פני מפות משתרעות.",
+    es:"Una serie de exploración de escondite de larga trayectoria sobre encontrar coleccionables ocultos en mapas extensos.",
+    fr:"Une série d'exploration cache-cache de longue date sur la recherche d'objets à collectionner cachés sur de vastes cartes.",
+    pt:"Uma série de exploração de esconde-esconde de longa data sobre encontrar colecionáveis escondidos em mapas extensos.",
+    de:"Eine langjährige Versteck-Erkundungsserie ums Finden versteckter Sammelobjekte auf weitläufigen Karten."
+  },
+  "robeats": {
+    he:"משחק ריתמוס אמיתי עם מערכת תווים אמיתית, מעוצב קרוב מאוד לז'אנרי משחקי ריתמוס ייעודיים.",
+    es:"Un auténtico juego de ritmo con un sistema de notas real, modelado de cerca en los géneros de juegos de ritmo dedicados.",
+    fr:"Un vrai jeu de rythme avec un système de notes réel, modelé de près sur les genres de jeux de rythme dédiés.",
+    pt:"Um autêntico jogo de ritmo com um sistema de notas real, modelado de perto nos gêneros de jogos de ritmo dedicados.",
+    de:"Ein echtes Rhythmusspiel mit einem echten Notensystem, eng an dedizierte Rhythmusspiel-Genres angelehnt."
+  },
+  "dance-off": {
+    he:"משחק ריתמוס וביצוע על ביצוע מדויק של תנועות ריקוד לפי הקצב - קל להיכנס אליו, מספק ברמות קושי גבוהות.",
+    es:"Un juego de ritmo y actuación sobre acertar pasos de baile al compás — fácil de aprender, satisfactorio en dificultades más altas.",
+    fr:"Un jeu de rythme et de performance sur le fait de réussir des pas de danse en rythme — facile à prendre en main, satisfaisant à haute difficulté.",
+    pt:"Um jogo de ritmo e performance sobre acertar passos de dança no tempo — fácil de aprender, satisfatório em dificuldades mais altas.",
+    de:"Ein Rhythmus- und Performance-Spiel ums Treffen von Tanzschritten im Takt — leicht zu erlernen, bei höherer Schwierigkeit befriedigend."
+  },
+  "build-a-boat-for-treasure": {
+    he:"משחק בנייה מבוסס-פיזיקה שבו עיצוב הסירה שלכם קובע ישירות עד כמה תוכלו לחקור. יצירתי ומאתגר באמת.",
+    es:"Un juego de construcción basado en física donde el diseño de tu barco determina directamente hasta dónde puedes explorar. Creativo y genuinamente desafiante.",
+    fr:"Un jeu de construction basé sur la physique où la conception de votre bateau détermine directement jusqu'où vous pouvez explorer. Créatif et vraiment difficile.",
+    pt:"Um jogo de construção baseado em física onde o design do seu barco determina diretamente até onde você pode explorar. Criativo e genuinamente desafiador.",
+    de:"Ein physikbasiertes Bauspiel, bei dem dein Bootsdesign direkt bestimmt, wie weit du erkunden kannst. Kreativ und wirklich herausfordernd."
+  },
+  "booga-booga": {
+    he:"סנדבוקס הישרדות על איסוף, יצירה, ובניית מחסה בעולם אי פתוח - איטי יותר ומחושב יותר מרוב משחקי ההישרדות.",
+    es:"Un sandbox de supervivencia sobre recolectar, craftear y construir refugio en un mundo isleño abierto — más pausado y reflexivo que la mayoría de juegos de supervivencia.",
+    fr:"Un sandbox de survie sur la collecte, l'artisanat et la construction d'un abri dans un monde insulaire ouvert — plus lent et plus réfléchi que la plupart des jeux de survie.",
+    pt:"Um sandbox de sobrevivência sobre coletar, craftar e construir abrigo em um mundo de ilha aberto — mais lento e pensado do que a maioria dos jogos de sobrevivência.",
+    de:"Eine Survival-Sandbox ums Sammeln, Craften und Bauen von Unterschlupf in einer offenen Inselwelt — langsamer und durchdachter als die meisten Survival-Spiele."
+  },
+  "work-at-a-pizza-place": {
+    he:"סנדבוקס רול-פליי עבודה קלאסי - אחד מסימולטורי החברה המשפיעים ביותר באמת בפלטפורמה, עדיין פעיל היום.",
+    es:"Un sandbox clásico de roleplay laboral — genuinamente uno de los sims sociales más influyentes de la plataforma, todavía activo hoy.",
+    fr:"Un sandbox de roleplay professionnel classique — véritablement l'un des sims sociaux les plus influents de la plateforme, toujours actif aujourd'hui.",
+    pt:"Um sandbox clássico de roleplay de trabalho — genuinamente um dos sims sociais mais influentes da plataforma, ainda ativo hoje.",
+    de:"Eine klassische Job-Rollenspiel-Sandbox — wirklich eines der einflussreichsten sozialen Sims der Plattform, heute noch aktiv."
+  },
+};
+function translatedDesc(name, desc){
+  const slug = slugify(name);
+  const tr = TRANSLATIONS[slug];
+  return (tr && tr[CURRENT_LANG]) ? tr[CURRENT_LANG] : (AUTO_TRANSLATIONS[CURRENT_LANG]?.[slug] || desc);
+}
+function translatedName(name){
+  return AUTO_NAMES[CURRENT_LANG]?.[slugify(name)] || name;
+}
+const AUTO_TRANSLATIONS = JSON.parse(localStorage.getItem('robloxAutoTranslations') || '{}');
+const AUTO_NAMES = JSON.parse(localStorage.getItem('robloxAutoNames') || '{}');
+let translationRun = 0;
+async function translateMissingDescriptions(lang){
+  if(lang === 'en') return;
+  const run = ++translationRun;
+  AUTO_TRANSLATIONS[lang] ||= {};
+  AUTO_NAMES[lang] ||= {};
+  const pending = DATA.flatMap(section => section.games)
+    .filter(game => (!TRANSLATIONS[slugify(game.name)]?.[lang] && !AUTO_TRANSLATIONS[lang][slugify(game.name)]) || !AUTO_NAMES[lang][slugify(game.name)])
+    .map(game => ({name:game.name, text:game.desc, slug:slugify(game.name)}));
+  for(let start = 0; start < pending.length; start += 6){
+    if(run !== translationRun) return;
+    const batch = pending.slice(start, start + 6);
+    await Promise.all(batch.map(async item => {
+      try{
+        const translate = async text => {
+          const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${encodeURIComponent(lang)}&dt=t&q=${encodeURIComponent(text)}`;
+          const response = await fetch(url);
+          const contentType = response.headers.get('content-type') || '';
+          if(response.ok && contentType.includes('json')){
+            const data = await response.json();
+            return data?.[0]?.map(part => part[0]).join('') || '';
+          }
+          const fallback = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${encodeURIComponent(lang)}`);
+          const fallbackData = await fallback.json();
+          return fallbackData?.responseData?.translatedText || '';
+        };
+        const translatedDescText = await translate(item.text);
+        const translatedGameName = await translate(item.name);
+        if(translatedDescText) AUTO_TRANSLATIONS[lang][item.slug] = translatedDescText;
+        if(translatedGameName) AUTO_NAMES[lang][item.slug] = translatedGameName;
+      }catch(error){
+        // Keep the original English description if translation is unavailable.
+      }
+    }));
+    localStorage.setItem('robloxAutoTranslations', JSON.stringify(AUTO_TRANSLATIONS));
+    localStorage.setItem('robloxAutoNames', JSON.stringify(AUTO_NAMES));
+    if(run === translationRun && CURRENT_LANG === lang) renderSections();
+  }
+}
+function translatedWith(value){
+  const translations = {
+    he:{solo:"יחיד",group:"קבוצה",friends:"חברים",crew:"צוות",squads:"חוליות",server:"שרת",players:"שחקנים",open:"שרת פתוח",hardcore:"הארדקור",chill:"רגוע",large:"קבוצה גדולה",better:"עדיף עם חבר",racing:"מרוצים",haul:"מסע ארוך",onevone:"1 על 1"},
+    es:{solo:"solo",group:"grupo",friends:"amigos",crew:"equipo",squads:"escuadras",server:"servidor",players:"jugadores",open:"servidor abierto",hardcore:"hardcore",chill:"tranquilo",large:"grupo grande",better:"mejor con un amigo",racing:"carreras",haul:"recorrido largo",onevone:"1 contra 1"},
+    fr:{solo:"solo",group:"groupe",friends:"amis",crew:"équipe",squads:"escouades",server:"serveur",players:"joueurs",open:"serveur ouvert",hardcore:"difficile",chill:"détente",large:"grand groupe",better:"mieux avec un ami",racing:"course",haul:"longue durée",onevone:"1 contre 1"},
+    pt:{solo:"solo",group:"grupo",friends:"amigos",crew:"equipe",squads:"esquadrões",server:"servidor",players:"jogadores",open:"servidor aberto",hardcore:"difícil",chill:"calmo",large:"grupo grande",better:"melhor com um amigo",racing:"corrida",haul:"jornada longa",onevone:"1 contra 1"},
+    de:{solo:"solo",group:"Gruppe",friends:"Freunde",crew:"Crew",squads:"Trupps",server:"Server",players:"Spieler",open:"offener Server",hardcore:"schwer",chill:"entspannt",large:"große Gruppe",better:"besser mit einem Freund",racing:"Rennen",haul:"lange Strecke",onevone:"1 gegen 1"},
+    ar:{solo:"فردي",group:"مجموعة",friends:"أصدقاء",crew:"فريق",squads:"فرق",server:"خادم",players:"لاعبين",open:"خادم مفتوح",hardcore:"صعب",chill:"هادئ",large:"مجموعة كبيرة",better:"أفضل مع صديق",racing:"سباقات",haul:"رحلة طويلة",onevone:"1 ضد 1"}
+  };
+  if(CURRENT_LANG === 'en') return value;
+  const numericPlayers = value.match(/^(\d+(?:-\d+|\+)?) players$/i);
+  if(numericPlayers){
+    const labels = {he:'שחקנים', es:'jugadores', fr:'joueurs', pt:'jogadores', de:'Spieler', ar:'لاعبين'};
+    return `${numericPlayers[1]} ${labels[CURRENT_LANG]}`;
+  }
+  const exact = {
+    '1v1':{he:'1 על 1',es:'1 contra 1',fr:'1 contre 1',pt:'1 contra 1',de:'1 gegen 1',ar:'1 ضد 1'},
+    'large squads':{he:'חוליות גדולות',es:'escuadras grandes',fr:'grandes escouades',pt:'esquadrões grandes',de:'große Trupps',ar:'فرق كبيرة'},
+    'long haul':{he:'מסע ארוך',es:'recorrido largo',fr:'longue durée',pt:'jornada longa',de:'lange Strecke',ar:'رحلة طويلة'},
+    'squads':{he:'חוליות',es:'escuadras',fr:'escouades',pt:'esquadrões',de:'Trupps',ar:'فرق'},
+    'open server':{he:'שרת פתוח',es:'servidor abierto',fr:'serveur ouvert',pt:'servidor aberto',de:'offener Server',ar:'خادم مفتوح'},
+    'large group':{he:'קבוצה גדולה',es:'grupo grande',fr:'grand groupe',pt:'grupo grande',de:'große Gruppe',ar:'مجموعة كبيرة'},
+    'hardcore solo':{he:'יחיד הארדקור',es:'solo hardcore',fr:'solo difficile',pt:'solo hardcore',de:'schweres Solo',ar:'فردي صعب'},
+    'chill solo':{he:'יחיד רגוע',es:'solo tranquilo',fr:'solo détente',pt:'solo tranquilo',de:'entspannt solo',ar:'فردي هادئ'},
+    'better with a friend':{he:'עדיף עם חבר',es:'mejor con un amigo',fr:'mieux avec un ami',pt:'melhor com um amigo',de:'besser mit einem Freund',ar:'أفضل مع صديق'}
+  };
+  if(exact[value]?.[CURRENT_LANG]) return exact[value][CURRENT_LANG];
+  return value.split(' / ').map(part => {
+    const key = part.toLowerCase().replace(/\+/g,'').trim().replace('1v1','onevone');
+    return translations[CURRENT_LANG]?.[key] || part;
+  }).join(' / ');
+}
+
+/* ---------- RENDER: FILTERS ---------- */
+const CATS = [{id:"all"}, ...DATA.map(s=>({id:s.cat}))];
+const filtersEl = document.getElementById('filters');
+CATS.forEach((c,i)=>{
+  const btn = document.createElement('button');
+  btn.className = 'chip' + (i===0 ? ' active' : '');
+  btn.dataset.cat = c.id;
+  btn.dataset.i18nChip = c.id === 'all' ? 'all' : c.id;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    filterSections(c.id);
+    loadVisibleGameImages();
+  });
+  filtersEl.appendChild(btn);
+});
+
+/* ---------- RENDER: STATS ---------- */
+const totalGames = DATA.reduce((n,s)=>n+s.games.length,0);
+function renderStats(){
+  const t = I18N[CURRENT_LANG];
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b>${totalGames}</b><span>${t.statGames}</span></div>
+    <div class="stat"><b>${DATA.length}</b><span>${t.statCats}</span></div>
+    <div class="stat"><b>0</b><span>${t.statBrainrot}</span></div>
+  `;
+}
+
+/* ---------- RENDER: SECTIONS ---------- */
+const sectionsEl = document.getElementById('sections');
+function renderSections(){
+  const t = I18N[CURRENT_LANG];
+  sectionsEl.innerHTML = '';
+  DATA.forEach(sec=>{
+    const accent = accentFor(sec.cat);
+    const label = (CATLABELS[sec.cat] && CATLABELS[sec.cat][CURRENT_LANG]) || sec.catLabel;
+    const section = document.createElement('div');
+    section.className = 'section';
+    section.dataset.cat = sec.cat;
+    section.innerHTML = `
+      <div class="section-head">
+        <span class="section-bar" style="background:${accent}; box-shadow:0 0 12px ${accent}88;"></span>
+        <h2>${label}</h2>
+        <span class="section-count mono">${sec.games.length} ${t.games}</span>
+      </div>
+      <div class="grid">
+        ${sec.games.map((g,gi)=>`
+          <div class="card" style="--accent:${accent}" data-cat="${sec.cat}" data-idx="${gi}" role="button" tabindex="0">
+            <div class="card-thumb no-img" data-game-slug="${slugify(g.name)}" data-cat="${sec.cat}" data-idx="${gi}">${translatedName(g.name)}</div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3>${translatedName(g.name)}</h3>
+                <div class="signal-meter lvl-${g.lvl}"><span></span><span></span><span></span><span></span><span></span></div>
+              </div>
+              <p>${translatedDesc(g.name, g.desc)}</p>
+              <div class="card-foot">
+                <span class="tag mono">${label}</span>
+                <span class="best-with mono">${translatedWith(g.with)}</span>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    sectionsEl.appendChild(section);
+  });
+  const activeCat = document.querySelector('.chip.active')?.dataset.cat || 'all';
+  filterSections(activeCat);
+  observeCards();
+  loadVisibleGameImages();
+}
+
+function filterSections(cat){
+  document.querySelectorAll('.section').forEach(sec=>{
+    sec.classList.toggle('hidden', cat!=='all' && sec.dataset.cat !== cat);
+  });
+}
+
+function observeCards(){
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, {threshold:.1, rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll('.card:not(.in)').forEach(c=>revealObserver.observe(c));
+}
+
+/* ---------- MODAL ---------- */
+const modalOverlay = document.getElementById('modalOverlay');
+async function resolveRobloxPlaceId(gameName){
+  const searchUrl = `https://games.roblox.com/v1/games/list?model.keyword=${encodeURIComponent(gameName)}&model.maxRows=1`;
+  try {
+    const response = await fetch(searchUrl, { headers: { Accept: 'application/json' } });
+    if (!response.ok) return null;
+    const data = await response.json();
+    const game = data?.games?.[0];
+    return game?.placeId || game?.rootPlaceId || null;
+  } catch (err) {
+    return null;
+  }
+}
+async function launchRobloxApp(gameName, robloxId){
+  const resolvedId = robloxId || null;
+  const search = encodeURIComponent(gameName);
+  const webUrl = `https://www.roblox.com/discover?Keyword=${search}`;
+  const appUrls = resolvedId
+    ? [`roblox-player://placeId=${resolvedId}`, `roblox://placeId=${resolvedId}`]
+    : [
+        `roblox://navigation?path=${encodeURIComponent(`/discover?Keyword=${gameName}`)}`,
+        `roblox-player://navigation?path=${encodeURIComponent(`/discover?Keyword=${gameName}`)}`,
+        'roblox://'
+      ];
+
+  const fallback = () => {
+    window.open(webUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  let launched = false;
+  for (const appUrl of appUrls) {
+    try {
+      const link = document.createElement('a');
+      link.href = appUrl;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      launched = true;
+      break;
+    } catch (err) {
+      continue;
+    }
+  }
+
+  if (!launched) {
+    fallback();
+    return;
+  }
+
+  const timer = window.setTimeout(() => {
+    if (!document.hidden) fallback();
+  }, 2200);
+  const onBlur = () => {
+    clearTimeout(timer);
+    window.removeEventListener('blur', onBlur);
+  };
+  window.addEventListener('blur', onBlur, { once: true });
+}
+function openModal(cat, idx){
+  const sec = DATA.find(s=>s.cat===cat);
+  const g = sec.games[idx];
+  const accent = accentFor(cat);
+  const label = (CATLABELS[cat] && CATLABELS[cat][CURRENT_LANG]) || sec.catLabel;
+  const t = I18N[CURRENT_LANG];
+
+  document.getElementById('modalPanel').style.setProperty('--accent', accent);
+  document.getElementById('modalThumbWrap').innerHTML = `<div class="modal-thumb no-img" id="modalGameThumb">${translatedName(g.name)}</div>`;
+  loadGameImage(g).then(imageUrl => {
+    const thumb = document.getElementById('modalGameThumb');
+    if(!thumb) return;
+    thumb.classList.remove('no-img');
+    if(imageUrl){
+      thumb.innerHTML = `<img src="${imageUrl}" alt="${g.name}">`;
+    } else {
+      thumb.textContent = translatedName(g.name);
+    }
+  });
+  document.getElementById('modalTitle').textContent = translatedName(g.name);
+  document.getElementById('modalDesc').textContent = translatedDesc(g.name, g.desc);
+  document.getElementById('modalCat').textContent = label;
+  document.getElementById('modalWith').textContent = translatedWith(g.with);
+  document.getElementById('modalHint').innerHTML = t.modalHint.replace('{game}', translatedName(g.name));
+
+  const playBtn = document.createElement('a');
+  playBtn.className = 'modal-cta';
+  playBtn.href = '#';
+  playBtn.textContent = t.playOnRoblox;
+  playBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await launchRobloxApp(g.name, g.robloxId);
+  });
+  document.getElementById('modalHint').appendChild(document.createElement('br'));
+  document.getElementById('modalHint').appendChild(playBtn);
+  const meter = document.getElementById('modalMeter');
+  meter.className = 'signal-meter lvl-' + g.lvl;
+
+  modalOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', (e)=>{ if(e.target === modalOverlay) closeModal(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+document.addEventListener('click', (e)=>{
+  const card = e.target.closest('.card');
+  if(!card) return;
+  openModal(card.dataset.cat, parseInt(card.dataset.idx, 10));
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  const card = e.target.closest('.card');
+  if(!card) return;
+  e.preventDefault();
+  openModal(card.dataset.cat, parseInt(card.dataset.idx, 10));
+});
+
+/* ---------- LANGUAGE SWITCH ---------- */
+function applyLang(lang){
+  CURRENT_LANG = lang;
+  const t = I18N[lang];
+  document.documentElement.dir = (lang === 'he' || lang === 'ar') ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+  document.title = t.logoHtml.replace(/<br>/g, ' ');
+  document.querySelector('[data-i18n-html="logo"]').innerHTML = t.logoHtml;
+  document.querySelector('[data-i18n="eyebrow"]').textContent = t.eyebrow;
+  document.querySelector('[data-i18n-html="hero"]').innerHTML = t.heroHtml;
+  document.querySelector('[data-i18n="sub"]').textContent = t.sub;
+  document.querySelector('[data-i18n="footerCredit"]').textContent = t.footerCredit;
+  document.querySelector('[data-i18n="footerMade"]').textContent = t.footerMade;
+  document.querySelectorAll('.chip').forEach(btn=>{
+    btn.textContent = btn.dataset.i18nChip === 'all'
+      ? t.all
+      : ((CATLABELS[btn.dataset.i18nChip] && CATLABELS[btn.dataset.i18nChip][lang]) || btn.dataset.i18nChip);
+  });
+  renderStats();
+  renderSections();
+  translateMissingDescriptions(lang);
+}
+
+const langSelectWrap = document.getElementById('langSelectWrap');
+const langSelect = document.getElementById('langSelect');
+const langOptions = [...document.querySelectorAll('.lang-option')];
+const languageLabels = {
+  en:{flag:'flag-us', text:'English'}, he:{flag:'flag-il', text:'עברית'},
+  es:{flag:'flag-es', text:'Español'}, fr:{flag:'flag-fr', text:'Français'},
+  pt:{flag:'flag-pt', text:'Português'}, de:{flag:'flag-de', text:'Deutsch'},
+  ar:{flag:'flag-sa', text:'العربية'}, ja:{flag:'flag-jp', text:'日本語'},
+  zh:{flag:'flag-cn', text:'简体中文'}, ko:{flag:'flag-ko', text:'한국어'}
+};
+
+function updateLanguageButton(lang){
+  const current = languageLabels[lang] || languageLabels.en;
+  langSelect.querySelector('.lang-current').innerHTML = `<span class="lang-flag ${current.flag}"></span><span>${current.text}</span>`;
+  langOptions.forEach(option => option.classList.toggle('active', option.dataset.lang === lang));
+}
+
+langSelect.addEventListener('click', () => {
+  const isOpen = langSelectWrap.classList.toggle('open');
+  langSelect.setAttribute('aria-expanded', String(isOpen));
+});
+langOptions.forEach(option => option.addEventListener('click', () => {
+  const lang = option.dataset.lang;
+  langSelectWrap.classList.remove('open');
+  langSelect.setAttribute('aria-expanded', 'false');
+  updateLanguageButton(lang);
+  applyLang(lang);
+}));
+document.addEventListener('click', event => {
+  if (!langSelectWrap.contains(event.target)) {
+    langSelectWrap.classList.remove('open');
+    langSelect.setAttribute('aria-expanded', 'false');
+  }
+});
+
+const fullScreenBtn = document.getElementById('fullScreenBtn');
+if (fullScreenBtn) {
+  const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+  const enterFullscreen = async () => {
+    const root = document.documentElement;
+    if (root.requestFullscreen) return root.requestFullscreen();
+    if (root.webkitRequestFullscreen) return root.webkitRequestFullscreen();
+    if (root.msRequestFullscreen) return root.msRequestFullscreen();
+    throw new Error('Fullscreen is not supported by this browser');
+  };
+  const exitFullscreen = async () => {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    if (document.msExitFullscreen) return document.msExitFullscreen();
+    throw new Error('Fullscreen exit is not supported by this browser');
+  };
+  const syncFullscreenButton = () => {
+    const isFullscreen = Boolean(fullscreenElement()) || document.documentElement.classList.contains('app-fullscreen');
+    fullScreenBtn.textContent = isFullscreen ? '⤡' : '⤢';
+    fullScreenBtn.setAttribute('aria-label', isFullscreen ? 'Exit full screen' : 'Open full screen');
+    fullScreenBtn.title = isFullscreen ? 'Exit full screen' : 'Open full screen';
+  };
+
+  fullScreenBtn.addEventListener('click', async () => {
+    const isFullscreen = Boolean(fullscreenElement()) || document.documentElement.classList.contains('app-fullscreen');
+    try {
+      if (!isFullscreen) {
+        document.documentElement.classList.add('app-fullscreen');
+        await enterFullscreen();
+      } else {
+        document.documentElement.classList.remove('app-fullscreen');
+        await exitFullscreen();
+      }
+    } catch (err) {
+      document.documentElement.classList.toggle('app-fullscreen', !isFullscreen);
+    }
+  });
+  const handleFullscreenChange = () => {
+    const isFullscreen = Boolean(fullscreenElement());
+    document.documentElement.classList.toggle('app-fullscreen', isFullscreen);
+    syncFullscreenButton();
+  };
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+  document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+  syncFullscreenButton();
+}
+
+updateLanguageButton('en');
+applyLang('en');
+</script>
+
+</body>
+</html>
