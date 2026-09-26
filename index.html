@@ -922,6 +922,21 @@ if(communitySectionIndex !== -1){
 }
 const GAME_UNIVERSE_IDS = JSON.parse(localStorage.getItem('robloxUniverseIds') || '{}');
 const GAME_IMAGES = JSON.parse(localStorage.getItem('robloxGameImages') || '{}');
+
+/* Game icons bundled locally under images/ so the page works offline and
+   without CORS limits. Slugs match slugify(game.name). */
+const LOCAL_ICON_SLUGS = new Set((
+  '3008 ability-wars adopt-me adventure-story ai-judge airport-tycoon all-star-tower-defense anime-adventures-aa anime-fighting-simulator anime-last-stand apeirophobia arcane-odyssey arcane-reborn arsenal a-universal-time bad-business basketball-zero bear bedwars bee-swarm-simulator berry-avenue-rp blade-ball blox-fruits bloxstrike bloxy-water-park booga-booga break-in brookhaven-rp bubble-gum-simulator-infinity build-a-boat-for-treasure build-a-football-squad build-island bumper-cars bumpy-flight burgerz camping car-crushers-2 car-dealership-tycoon catalog-avatar-creator catch-1-billion-ducks chat-ragdoll-voice-hangout cheating-during-testing cineblox clean-the-golf-yard climb-a-mountain club-roblox combat-warriors creatures-of-sonaria da-hood dance-off dandy-s-world dead-silence-horror deepwoken doors dragon-adventures drain-the-lake driving-empire driving-simulator dueling-grounds dungeon-quest elemental-battlegrounds elemental-dungeons emergency-response-liberty-county epic-minigames escape-room escape-the-backrooms evade face-your-fears-a-phobia-game fantastic-frontier find-the-markers fisch fishing-simulator flee-the-facility flicker flood-escape-2 forsaken funhouse generic-cooking-game grand-piece-online greenville guest-666 h2o-mermaids-island hatman hoops-life identity-fraud innovation-inc-spaceship islands jailbreak king-legacy land-or-die legends-of-speed legends-re-written livetopia loomian-legacy lumber-tycoon-2 mad-city mansion-tycoon meepcity mega-fun-obby midnight-racing-tokyo miner-s-haven mining-simulator-2 mocker-horror mukbang-game mulberry-county murder-mystery-2 murder-mystery-duels muscle-legends my-restaurant natural-disaster-survival needle-in-a-haystack nico-s-nextbots ninja-legends noobs-pizza-place-revival-2017 notoriety obby-but-you-re-on-a-bike obby-creator parkour peroxide pet-catchers pet-simulator-99 pets-vs-police phantom-forces piggy pilgrammed pizza-factory-tycoon plane-crazy pls-donate pressure prison-life project-power project-slayers protect-the-border punching-simulator rainbow-friends rate-my-avatar recoil restaurant-tycoon-2 retail-tycoon-2 rivals robeats roblox-formula-1-world-series robloxian-high-school rocitizens ro-ghoul rogue-demon royale-high runaways rv-chaos saber-simulator scorched-earth scp-roleplay sell-lemons sevenm-hood-testing shindo-life slap-battles slaughter slime-simulator slippery-stairs soccer-league southwest-florida speed-run-4 starbasis strongman-simulator strucid survive-7-days-in-arctic survive-the-killer sword-fighters-simulator the-butchery the-eastern-war the-floor-is-lava the-hour-of-creation the-intruder theme-park-tycoon-2 the-mimic the-muerto-county-massacre the-night-shift-experience the-rake the-strongest-battlegrounds the-wild-west tower-battles tower-defense-simulator tower-heroes tower-of-hell treasure-quest twilight-daycare type-soul ultimate-driving untitled-tag-game vehicle-legends vesteria violent-party volleyball-legends welcome-to-bloxburg westwood wonderland work-at-a-pizza-place world-at-war world-zero zoo-tycoon'
+).split(' '));
+
+/* Hand-replaced icons that differ from the auto-downloaded images/<slug>.webp file. */
+const LOCAL_ICON_OVERRIDES = {
+  'da-hood': 'images/da-hood.png'
+};
+
+const localIconUrl = slug => LOCAL_ICON_OVERRIDES[slug]
+  || (LOCAL_ICON_SLUGS.has(slug) ? `images/${slug}.webp` : null);
+
 const GAME_ALIASES = {
   'mocker-horror': 3249123901,
   'face-your-fears-a-phobia-game': 4437488221,
@@ -950,9 +965,15 @@ const GAME_ALIASES = {
   'hatman': 7477645612
 };
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+/* Roblox APIs send no CORS headers, so direct fetch() is blocked in the browser.
+   Route through a public CORS proxy so the page works even from a local file. */
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const viaCorsProxy = url => CORS_PROXY + encodeURIComponent(url);
+
 async function robloxJson(url){
   for(let attempt = 0; attempt < 4; attempt++){
-    const response = await fetch(url);
+    const response = await fetch(viaCorsProxy(url));
     if(response.status !== 429) return response.ok ? response.json() : null;
     await wait(700 * (attempt + 1));
   }
@@ -997,6 +1018,8 @@ async function resolveUniverseId(game){
 
 async function loadGameImage(game){
   const slug = slugify(game.name);
+  const localIcon = localIconUrl(slug);
+  if(localIcon) return localIcon;
   if(GAME_IMAGES[slug]) return GAME_IMAGES[slug];
   const universeId = await resolveUniverseId(game);
   if(!universeId) return null;
@@ -2364,7 +2387,7 @@ const modalOverlay = document.getElementById('modalOverlay');
 async function resolveRobloxPlaceId(gameName){
   const searchUrl = `https://games.roblox.com/v1/games/list?model.keyword=${encodeURIComponent(gameName)}&model.maxRows=1`;
   try {
-    const response = await fetch(searchUrl, { headers: { Accept: 'application/json' } });
+    const response = await fetch(viaCorsProxy(searchUrl), { headers: { Accept: 'application/json' } });
     if (!response.ok) return null;
     const data = await response.json();
     const game = data?.games?.[0];
